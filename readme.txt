@@ -13,3 +13,12 @@ const isActive = element.dataset.isActive;  // 'true' が取得される
 
 document.getElementById("turn").textContent = "白";
 document.getElementById("turn").setAttribute("data-turn", "白");
+
+・データベースの初期条件
+python manage.py makemigrations --empty othello
+
+//モデルのboard---各セルをblack, white, emptyで管理する---は1次元配列
+        //この1次元配列を2次元配列に変換する関数
+        const translate_array = () =>{
+
+        }

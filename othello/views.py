@@ -1,7 +1,8 @@
+import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
+from .models import Game
 
 # Create your views here.
 @csrf_exempt  # CSRFトークンを無効化（開発中のみ使用、実際のプロダクションでは適切に対策が必要）
@@ -26,4 +27,9 @@ def fetch_data(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def home(request):
-    return render(request, 'home.html')
+    game = Game.objects.first()
+    return render(request, 'home.html', {
+        'game': game,
+        'turn': game.turn,
+        'board': json.dumps(game.board)  # board を JSON 形式に変換して渡す
+    })

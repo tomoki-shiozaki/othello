@@ -24,12 +24,16 @@
           font-size: 20px;
         }
 
-        .othello-cell.black{
+        .othello-grid-cell.black{
             background-color: black;
+            width: 80%;
+            height: 80%;
             border-radius: 100%;
         }
-        .othello-cell.white{
+        .othello-grid-cell.white{
             background-color: white;
+            width: 80%;
+            height: 80%;
             border-radius: 100%;
         }
       </style>
@@ -37,6 +41,8 @@
 <body>
     <h1>オセロ</h1>
     <div><span id="turn" name="turn" data-turn="black">black</span>'s turn.</div>
+
+    <!--オセロの盤面-->
     <div class="othello-grid-container">
     <!-- .othello-grid-item#othello-grid-item$@0*64>.othello-grid-cell#othello-cell$@0 -->
         <div class="othello-grid-item" id="othello-grid-item0">
@@ -259,8 +265,38 @@
         }
     </script> -->
     
-
     <script>
+        //盤面を描画する処理
+        const board = JSON.parse('{{ board|escapejs }}');  // board を JSON 文字列として埋め込む
+        console.log(board);
+
+        //モデルのboard---各セルをblack, white, emptyで管理する---は1次元配列
+        //この2次元配列を1次元配列に変換する関数
+        //
+        const translateArray = (dim2_list) =>{
+            const dim1_list=[]
+            for(let i=0; i<8; i++){
+                for(let j=0; j<8; j++){
+                    dim1_list.push(dim2_list[i][j])
+                }
+            }
+            return dim1_list
+        }
+        //dim1_boardは、２次元のボードを１次元の配列にしたもの
+        const dim1_board = translateArray(board);
+        console.log(dim1_board);
+        for(let i=0; i<64; i++){
+            if(dim1_board[i] === 'black'){
+                document.getElementById(`othello-cell${i}`).classList.add('black');
+                document.getElementById(`othello-cell${i}`).classList.remove('white');
+            }else if(dim1_board[i] === 'white'){
+                document.getElementById(`othello-cell${i}`).classList.add('white');
+                document.getElementById(`othello-cell${i}`).classList.remove('black');
+            }
+        }
+
+
+        //クリックして、オセロの駒を打つ処理
         for(let i=0; i<64; i++){
             document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function(event) {
             event.preventDefault();  // フォームのデフォルト動作を防止
