@@ -9,6 +9,17 @@ class Rule:
         #行、列のインデックス
         self.cell_row = cell//8
         self.cell_column = cell%8
+        #オセロの駒の処理のために、拡張した盤面を用いることにする
+        #拡張した盤面
+        extended_board=[]
+        for _ in range(10):
+            extended_board.append(['empty']*10)
+        for i in range(8):
+            for j in range(8):
+                extended_board[i+1][j+1] = board[i][j]
+        self.extended_board = extended_board
+        self.extended_cell_row = self.cell_row + 1
+        self.extended_cell_column = self.cell_column + 1
         
     def can_place_piece(self):
         can_place_piece = False
@@ -17,20 +28,20 @@ class Rule:
             for dy in [-1, 0, 1]:
                 for dx in [-1, 0, 1]:
                     if not(dy == 0 and dx == 0):
-                        y = self.cell_row    + dy
-                        x = self.cell_column + dx
-                        if not (0 <= y < 8 and 0 <= x < 8):
+                        y = self.extended_cell_row    + dy
+                        x = self.extended_cell_column + dx
+                        if not (1 <= y < 9 and 1 <= x < 9):
                             continue
-                        if self.board[y][x] == 'white':
+                        if self.extended_board[y][x] == 'white':
                             y += dy
                             x += dx
-                            while y >= 0 and y < 8 and x >= 0 and x < 8:
-                                if self.board[y][x] == 'white':                                
+                            while 1 <= y < 9 and 1 <= x < 9:
+                                if self.extended_board[y][x] == 'white':                                
                                     y += dy
                                     x += dx
-                                if self.board[y][x] == 'empty':
+                                if self.extended_board[y][x] == 'empty':
                                     break
-                                if self.board[y][x] == 'black':
+                                if self.extended_board[y][x] == 'black':
                                     can_place_piece = True   
                                     break
             return can_place_piece
@@ -40,20 +51,20 @@ class Rule:
             for dy in [-1, 0, 1]:
                 for dx in [-1, 0, 1]:
                     if not(dy == 0 and dx == 0):
-                        y = self.cell_row    + dy
-                        x = self.cell_column + dx
-                        if not (0 <= y < 8 and 0 <= x < 8):
+                        y = self.extended_cell_row    + dy
+                        x = self.extended_cell_column + dx
+                        if not (1 <= y < 9 and 1 <= x < 9):
                             continue
-                        if self.board[y][x] == 'black':
+                        if self.extended_board[y][x] == 'black':
                             y += dy
                             x += dx
-                            while y >= 0 and y < 8 and x >= 0 and x < 8:
-                                if self.board[y][x] == 'black':                                
+                            while 1 <= y < 9 and 1 <= x < 9:
+                                if self.extended_board[y][x] == 'black':                                
                                     y += dy
                                     x += dx
-                                if self.board[y][x] == 'empty':
+                                if self.extended_board[y][x] == 'empty':
                                     break
-                                if self.board[y][x] == 'white':
+                                if self.extended_board[y][x] == 'white':
                                     can_place_piece = True   
                                     break
             return can_place_piece
@@ -67,23 +78,23 @@ class Rule:
             for dy in [-1, 0, 1]:
                 for dx in [-1, 0, 1]:
                     if not(dy == 0 and dx == 0):
-                        y = self.cell_row    + dy
-                        x = self.cell_column + dx
+                        y = self.extended_cell_row    + dy
+                        x = self.extended_cell_column + dx
                         n = 0 #ひっくり返す駒枚数を各方向ごとに数える
-                        if not (0 <= y < 8 and 0 <= x < 8):
+                        if not (1 <= y < 9 and 1 <= x < 9):
                             continue
-                        if self.board[y][x] == 'white':
+                        if self.extended_board[y][x] == 'white':
                             y += dy
                             x += dx
                             n += 1
-                            while y >= 0 and y < 8 and x >= 0 and x < 8:
-                                if self.board[y][x] == 'white':                                
+                            while 1 <= y < 9 and 1 <= x < 9:
+                                if self.extended_board[y][x] == 'white':                                
                                     y += dy
                                     x += dx
                                     n += 1
-                                if self.board[y][x] == 'empty':
+                                if self.extended_board[y][x] == 'empty':
                                     break
-                                if self.board[y][x] == 'black':
+                                if self.extended_board[y][x] == 'black':
                                     #駒(n枚)をひっくり返す
                                     for r in range(1, n+1):
                                         self.board[self.cell_row + r*dy][self.cell_column + r*dx] = 'black'
@@ -98,23 +109,23 @@ class Rule:
             for dy in [-1, 0, 1]:
                 for dx in [-1, 0, 1]:
                     if not(dy == 0 and dx == 0):
-                        y = self.cell_row    + dy
-                        x = self.cell_column + dx
+                        y = self.extended_cell_row    + dy
+                        x = self.extended_cell_column + dx
                         n = 0 #ひっくり返す駒枚数を各方向ごとに数える
-                        if not (0 <= y < 8 and 0 <= x < 8):
+                        if not (1 <= y < 9 and 1 <= x < 9):
                             continue
-                        if self.board[y][x] == 'black':
+                        if self.extended_board[y][x] == 'black':
                             y += dy
                             x += dx
                             n += 1
-                            while y >= 0 and y < 8 and x >= 0 and x < 8:
-                                if self.board[y][x] == 'black':                                
+                            while 1 <= y < 9 and 1 <= x < 9:
+                                if self.extended_board[y][x] == 'black':                                
                                     y += dy
                                     x += dx
                                     n += 1
-                                if self.board[y][x] == 'empty':
+                                if self.extended_board[y][x] == 'empty':
                                     break
-                                if self.board[y][x] == 'white':
+                                if self.extended_board[y][x] == 'white':
                                     #駒(n枚)をひっくり返す
                                     for r in range(1, n+1):
                                         self.board[self.cell_row + r*dy][self.cell_column + r*dx] = 'white'
