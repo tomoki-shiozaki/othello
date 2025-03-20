@@ -71,3 +71,28 @@ def start_new_game(request):
     Game.objects.create(board=initial_board, turn='black\'s turn')
     # 新しいゲームが作成されたら、ホームページ（ゲーム進行ページ）にリダイレクト
     return redirect('/')
+
+@csrf_exempt
+def pass_turn(request):
+    if request.method == "POST":
+        try:
+            #ゲームオブジェクトを取得
+            game = Game.objects.first()            
+            if game.turn == 'black\'s turn':
+                game.turn = 'white\'s turn'
+            else:
+                game.turn = 'black\'s turn'                  
+
+            #変更を保存
+            game.save()
+            
+            # レスポンスデータの作成
+            response_data = {
+                'message': 'Player passed.'
+            }
+
+            return JsonResponse(response_data)
+    
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

@@ -9,4 +9,6 @@ urlpatterns = [
     path('', views.home, name='home'), 
     #オセロの駒を打つリクエスト
     path('fetch_data/', views.fetch_data, name='fetch_data'),
+    #ターンをパスするリクエスト
+    path('pass_turn/', views.pass_turn, name='pass_turn'),
 ]
