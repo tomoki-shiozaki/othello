@@ -1,5 +1,8 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,243 +10,219 @@
     <!-- BootstrapのCSSをリンク -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-
-    <style>
-        .othello-grid-container {
-          display: grid;
-          grid-template-columns: repeat(8, 1fr); /* 8列の格子 */
-          grid-template-rows: repeat(8, 1fr); /* 8行の格子 */
-          width: 400px; /* 格子の幅 */
-          height: 400px; /* 格子の高さ */
-          border: 2px solid black; /* 格子全体の枠 */
-          margin: 0 auto;
-        }
-    
-        .othello-grid-item {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          background-color: green;
-          border: 1px solid #ccc; /* セルの枠線 */
-          font-size: 20px;
-        }
-
-        .othello-grid-cell.black{
-            background-color: black;
-            width: 80%;
-            height: 80%;
-            border-radius: 100%;
-        }
-        .othello-grid-cell.white{
-            background-color: white;
-            width: 80%;
-            height: 80%;
-            border-radius: 100%;
-        }
-      </style>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
 </head>
-<body>
-    <h1>オセロ</h1>
-    <div><span id="turn" name="turn"></span>の番</div>
 
-    <!--オセロの盤面-->
-    <div class="othello-grid-container">
-    <!-- .othello-grid-item#othello-grid-item$@0*64>.othello-grid-cell#othello-cell$@0 -->
-        <div class="othello-grid-item" id="othello-grid-item0">
-            <div class="othello-grid-cell" id="othello-cell0"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item1">
-            <div class="othello-grid-cell" id="othello-cell1"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item2">
-            <div class="othello-grid-cell" id="othello-cell2"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item3">
-            <div class="othello-grid-cell" id="othello-cell3"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item4">
-            <div class="othello-grid-cell" id="othello-cell4"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item5">
-            <div class="othello-grid-cell" id="othello-cell5"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item6">
-            <div class="othello-grid-cell" id="othello-cell6"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item7">
-            <div class="othello-grid-cell" id="othello-cell7"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item8">
-            <div class="othello-grid-cell" id="othello-cell8"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item9">
-            <div class="othello-grid-cell" id="othello-cell9"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item10">
-            <div class="othello-grid-cell" id="othello-cell10"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item11">
-            <div class="othello-grid-cell" id="othello-cell11"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item12">
-            <div class="othello-grid-cell" id="othello-cell12"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item13">
-            <div class="othello-grid-cell" id="othello-cell13"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item14">
-            <div class="othello-grid-cell" id="othello-cell14"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item15">
-            <div class="othello-grid-cell" id="othello-cell15"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item16">
-            <div class="othello-grid-cell" id="othello-cell16"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item17">
-            <div class="othello-grid-cell" id="othello-cell17"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item18">
-            <div class="othello-grid-cell" id="othello-cell18"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item19">
-            <div class="othello-grid-cell" id="othello-cell19"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item20">
-            <div class="othello-grid-cell" id="othello-cell20"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item21">
-            <div class="othello-grid-cell" id="othello-cell21"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item22">
-            <div class="othello-grid-cell" id="othello-cell22"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item23">
-            <div class="othello-grid-cell" id="othello-cell23"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item24">
-            <div class="othello-grid-cell" id="othello-cell24"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item25">
-            <div class="othello-grid-cell" id="othello-cell25"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item26">
-            <div class="othello-grid-cell" id="othello-cell26"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item27">
-            <div class="othello-grid-cell" id="othello-cell27"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item28">
-            <div class="othello-grid-cell" id="othello-cell28"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item29">
-            <div class="othello-grid-cell" id="othello-cell29"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item30">
-            <div class="othello-grid-cell" id="othello-cell30"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item31">
-            <div class="othello-grid-cell" id="othello-cell31"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item32">
-            <div class="othello-grid-cell" id="othello-cell32"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item33">
-            <div class="othello-grid-cell" id="othello-cell33"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item34">
-            <div class="othello-grid-cell" id="othello-cell34"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item35">
-            <div class="othello-grid-cell" id="othello-cell35"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item36">
-            <div class="othello-grid-cell" id="othello-cell36"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item37">
-            <div class="othello-grid-cell" id="othello-cell37"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item38">
-            <div class="othello-grid-cell" id="othello-cell38"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item39">
-            <div class="othello-grid-cell" id="othello-cell39"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item40">
-            <div class="othello-grid-cell" id="othello-cell40"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item41">
-            <div class="othello-grid-cell" id="othello-cell41"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item42">
-            <div class="othello-grid-cell" id="othello-cell42"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item43">
-            <div class="othello-grid-cell" id="othello-cell43"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item44">
-            <div class="othello-grid-cell" id="othello-cell44"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item45">
-            <div class="othello-grid-cell" id="othello-cell45"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item46">
-            <div class="othello-grid-cell" id="othello-cell46"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item47">
-            <div class="othello-grid-cell" id="othello-cell47"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item48">
-            <div class="othello-grid-cell" id="othello-cell48"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item49">
-            <div class="othello-grid-cell" id="othello-cell49"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item50">
-            <div class="othello-grid-cell" id="othello-cell50"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item51">
-            <div class="othello-grid-cell" id="othello-cell51"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item52">
-            <div class="othello-grid-cell" id="othello-cell52"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item53">
-            <div class="othello-grid-cell" id="othello-cell53"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item54">
-            <div class="othello-grid-cell" id="othello-cell54"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item55">
-            <div class="othello-grid-cell" id="othello-cell55"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item56">
-            <div class="othello-grid-cell" id="othello-cell56"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item57">
-            <div class="othello-grid-cell" id="othello-cell57"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item58">
-            <div class="othello-grid-cell" id="othello-cell58"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item59">
-            <div class="othello-grid-cell" id="othello-cell59"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item60">
-            <div class="othello-grid-cell" id="othello-cell60"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item61">
-            <div class="othello-grid-cell" id="othello-cell61"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item62">
-            <div class="othello-grid-cell" id="othello-cell62"></div>
-        </div>
-        <div class="othello-grid-item" id="othello-grid-item63">
-            <div class="othello-grid-cell" id="othello-cell63"></div>
-        </div>
-    </div>
-    <div id="response"></div>
-    <!-- <script>        
+<body>
+    <header>
+        <div class="container-fluid">
+            <h1>オセロ</h1>
+        </div>
+
+    </header>
+
+    <main>
+        <div class="container-fluid">
+            <div class="turn-indicator"><span id="turn" name="turn"></span>の番</div>
+
+            <!--オセロの盤面-->
+            <div class="othello-grid-container">
+                <!-- .othello-grid-item#othello-grid-item$@0*64>.othello-grid-cell#othello-cell$@0 -->
+                <div class="othello-grid-item" id="othello-grid-item0">
+                    <div class="othello-grid-cell" id="othello-cell0"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item1">
+                    <div class="othello-grid-cell" id="othello-cell1"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item2">
+                    <div class="othello-grid-cell" id="othello-cell2"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item3">
+                    <div class="othello-grid-cell" id="othello-cell3"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item4">
+                    <div class="othello-grid-cell" id="othello-cell4"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item5">
+                    <div class="othello-grid-cell" id="othello-cell5"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item6">
+                    <div class="othello-grid-cell" id="othello-cell6"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item7">
+                    <div class="othello-grid-cell" id="othello-cell7"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item8">
+                    <div class="othello-grid-cell" id="othello-cell8"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item9">
+                    <div class="othello-grid-cell" id="othello-cell9"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item10">
+                    <div class="othello-grid-cell" id="othello-cell10"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item11">
+                    <div class="othello-grid-cell" id="othello-cell11"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item12">
+                    <div class="othello-grid-cell" id="othello-cell12"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item13">
+                    <div class="othello-grid-cell" id="othello-cell13"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item14">
+                    <div class="othello-grid-cell" id="othello-cell14"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item15">
+                    <div class="othello-grid-cell" id="othello-cell15"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item16">
+                    <div class="othello-grid-cell" id="othello-cell16"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item17">
+                    <div class="othello-grid-cell" id="othello-cell17"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item18">
+                    <div class="othello-grid-cell" id="othello-cell18"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item19">
+                    <div class="othello-grid-cell" id="othello-cell19"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item20">
+                    <div class="othello-grid-cell" id="othello-cell20"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item21">
+                    <div class="othello-grid-cell" id="othello-cell21"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item22">
+                    <div class="othello-grid-cell" id="othello-cell22"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item23">
+                    <div class="othello-grid-cell" id="othello-cell23"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item24">
+                    <div class="othello-grid-cell" id="othello-cell24"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item25">
+                    <div class="othello-grid-cell" id="othello-cell25"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item26">
+                    <div class="othello-grid-cell" id="othello-cell26"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item27">
+                    <div class="othello-grid-cell" id="othello-cell27"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item28">
+                    <div class="othello-grid-cell" id="othello-cell28"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item29">
+                    <div class="othello-grid-cell" id="othello-cell29"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item30">
+                    <div class="othello-grid-cell" id="othello-cell30"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item31">
+                    <div class="othello-grid-cell" id="othello-cell31"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item32">
+                    <div class="othello-grid-cell" id="othello-cell32"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item33">
+                    <div class="othello-grid-cell" id="othello-cell33"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item34">
+                    <div class="othello-grid-cell" id="othello-cell34"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item35">
+                    <div class="othello-grid-cell" id="othello-cell35"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item36">
+                    <div class="othello-grid-cell" id="othello-cell36"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item37">
+                    <div class="othello-grid-cell" id="othello-cell37"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item38">
+                    <div class="othello-grid-cell" id="othello-cell38"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item39">
+                    <div class="othello-grid-cell" id="othello-cell39"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item40">
+                    <div class="othello-grid-cell" id="othello-cell40"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item41">
+                    <div class="othello-grid-cell" id="othello-cell41"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item42">
+                    <div class="othello-grid-cell" id="othello-cell42"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item43">
+                    <div class="othello-grid-cell" id="othello-cell43"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item44">
+                    <div class="othello-grid-cell" id="othello-cell44"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item45">
+                    <div class="othello-grid-cell" id="othello-cell45"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item46">
+                    <div class="othello-grid-cell" id="othello-cell46"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item47">
+                    <div class="othello-grid-cell" id="othello-cell47"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item48">
+                    <div class="othello-grid-cell" id="othello-cell48"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item49">
+                    <div class="othello-grid-cell" id="othello-cell49"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item50">
+                    <div class="othello-grid-cell" id="othello-cell50"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item51">
+                    <div class="othello-grid-cell" id="othello-cell51"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item52">
+                    <div class="othello-grid-cell" id="othello-cell52"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item53">
+                    <div class="othello-grid-cell" id="othello-cell53"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item54">
+                    <div class="othello-grid-cell" id="othello-cell54"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item55">
+                    <div class="othello-grid-cell" id="othello-cell55"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item56">
+                    <div class="othello-grid-cell" id="othello-cell56"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item57">
+                    <div class="othello-grid-cell" id="othello-cell57"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item58">
+                    <div class="othello-grid-cell" id="othello-cell58"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item59">
+                    <div class="othello-grid-cell" id="othello-cell59"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item60">
+                    <div class="othello-grid-cell" id="othello-cell60"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item61">
+                    <div class="othello-grid-cell" id="othello-cell61"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item62">
+                    <div class="othello-grid-cell" id="othello-cell62"></div>
+                </div>
+                <div class="othello-grid-item" id="othello-grid-item63">
+                    <div class="othello-grid-cell" id="othello-cell63"></div>
+                </div>
+            </div>
+            <div id="response"></div>
+            <!-- <script>        
         const othello_items = []
         for(let i = 0; i < 64; i++){
             othello_items[i] = document.getElementById(`othello-item${i}`)
@@ -268,94 +247,118 @@
             }
         }
     </script> -->
-    
-    <button type="button" class="btn btn-secondary" id="pass-turn">パス</button>
 
+            <button type="button" class="btn btn-secondary btn-lg" id="pass-turn">パス</button>
+        </div>
+    </main>
+    
+    <hr>
+    <footer>
+        <small>Copyright&copy;2025 Shiozaki All rights reserved</small>
+    </footer>
     <script>
+        //displayTurnIndicator()関数は、プレイヤーターン（黒か白）を表示する関数
+        //boardTurnは、'black\'s turn'か'white\'s turn'
+        const displayTurnIndicator = (boardTurn) => {
+            const turnElement = document.getElementById('turn');
+            if(boardTurn === 'black\'s turn'){
+                turnElement.textContent = '黒'
+            }else if(boardTurn === 'white\'s turn'){
+                turnElement.textContent = '白'
+            }else{
+                turnElement.textContent = '不明'
+            }
+        }
+
         //モデルのboard---各セルをblack, white, emptyで管理する---は1次元配列
         //この2次元配列を1次元配列に変換する関数
-        const translateArray = (dim2_list) =>{
-                const dim1_list=[]
-                for(let i=0; i<8; i++){
-                    for(let j=0; j<8; j++){
-                        dim1_list.push(dim2_list[i][j])
-                    }
+        const translateArray = (dim2_list) => {
+            const dim1_list = []
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    dim1_list.push(dim2_list[i][j])
                 }
-                return dim1_list
             }
+            return dim1_list
+        }
 
+        const initialTurn = '{{ turn|escapejs }}';  // {{turn}} を JSに埋め込む
+        displayTurnIndicator(initialTurn);        
+      
         const initial_board = JSON.parse('{{ board|escapejs }}');  // board を JSON 文字列として埋め込む
 
         const dim1_initial_board = translateArray(initial_board);
         console.log(dim1_initial_board);
 
-        for(let i=0; i<64; i++){
-            if(dim1_initial_board[i] === 'black'){
+        for (let i = 0; i < 64; i++) {
+            if (dim1_initial_board[i] === 'black') {
                 document.getElementById(`othello-cell${i}`).classList.add('black');
                 document.getElementById(`othello-cell${i}`).classList.remove('white');
                 document.getElementById(`othello-cell${i}`).classList.remove('empty');
-            }else if(dim1_initial_board[i] === 'white'){
+            } else if (dim1_initial_board[i] === 'white') {
                 document.getElementById(`othello-cell${i}`).classList.add('white');
                 document.getElementById(`othello-cell${i}`).classList.remove('black');
                 document.getElementById(`othello-cell${i}`).classList.remove('empty');
             }
-        }        
-        
-        const updateBoard = (board) => {  
+        }
+
+        const updateBoard = (board) => {
             //引数boardはJSON文字列     
             //dim1_boardは、２次元のボードを１次元の配列にしたもの
             const dim1_board = translateArray(board);
             console.log(dim1_board);
 
-            for(let i=0; i<64; i++){
-                if(dim1_board[i] === 'black'){
+            for (let i = 0; i < 64; i++) {
+                if (dim1_board[i] === 'black') {
                     document.getElementById(`othello-cell${i}`).classList.add('black');
                     document.getElementById(`othello-cell${i}`).classList.remove('white');
                     document.getElementById(`othello-cell${i}`).classList.remove('empty');
-                }else if(dim1_board[i] === 'white'){
+                } else if (dim1_board[i] === 'white') {
                     document.getElementById(`othello-cell${i}`).classList.add('white');
                     document.getElementById(`othello-cell${i}`).classList.remove('black');
                     document.getElementById(`othello-cell${i}`).classList.remove('empty');
                 }
             }
-        }     
+        }
 
         //クリックして、オセロの駒を打つ処理
-        for(let i=0; i<64; i++){
-            document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function(event) {
-            event.preventDefault();  // フォームのデフォルト動作を防止
+        for (let i = 0; i < 64; i++) {
+            document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function (event) {
+                event.preventDefault();  // フォームのデフォルト動作を防止
 
-            const cell = i;
-            console.log(cell);
+                const cell = i;
+                console.log(cell);
 
-            const responseDiv = document.getElementById('response');
+                const responseDiv = document.getElementById('response');
 
-            try {
-                const response = await fetch('/fetch_data/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ cell: cell })
-                });
+                try {
+                    const response = await fetch('/fetch_data/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ cell: cell })
+                    });
 
-                const data = await response.json();
+                    const data = await response.json();
 
-                if (response.ok) {
-                    responseDiv.innerHTML = `<p>${data.message}</p>`;
-                    //const board = JSON.parse('{{ data.board|escapejs }}');  // fetch_data から返されたデータの board を使う
-                    updateBoard(data.board);
-                } else {
-                    responseDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                    if (response.ok) {
+                        //responseDiv.innerHTML = `<p>${data.message}</p>`;
+                        //const board = JSON.parse('{{ data.board|escapejs }}');  // fetch_data から返されたデータの board を使う
+                        updateBoard(data.board);
+                        displayTurnIndicator(data.turn);
+                    }
+                    else {
+                        responseDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+                    }
+                } catch (error) {
+                    responseDiv.innerHTML = `<p>Network error: ${error}</p>`;
                 }
-            } catch (error) {
-                responseDiv.innerHTML = `<p>Network error: ${error}</p>`;
-            }
-        });
+            });
         }
 
         //パス機能
-        document.getElementById('pass-turn').addEventListener('click', async function(event) {
+        document.getElementById('pass-turn').addEventListener('click', async function (event) {
             event.preventDefault();  // フォームのデフォルト動作を防止
 
             try {
@@ -370,18 +373,22 @@
                 const data = await response.json();
 
                 if (response.ok) {
+                    displayTurnIndicator(data.turn);
                     console.log(`${data.message}`);
                 } else {
-                   console.log(`Error: ${data.error}`);
+                    console.log(`Error: ${data.error}`);
                 }
             } catch (error) {
-               console.log(`Network error: ${error}`);
+                console.log(`Network error: ${error}`);
             }
         })
-        
+
     </script>
     <!-- BootstrapのJavaScriptと依存ライブラリ（Popper.js）をリンク -->
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
 
 </body>
+
 </html>

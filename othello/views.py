@@ -37,6 +37,7 @@ def fetch_data(request):
                 'message': f'It\'s {game.turn}! You put the piece in the {cell} cell.',
                 'received': body,
                 'board': game.board,
+                'turn': game.turn,
             }
 
             return JsonResponse(response_data)
@@ -88,7 +89,8 @@ def pass_turn(request):
             
             # レスポンスデータの作成
             response_data = {
-                'message': 'Player passed.'
+                'message': 'Player passed.',
+                'turn': game.turn,
             }
 
             return JsonResponse(response_data)
