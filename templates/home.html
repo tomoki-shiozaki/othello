@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    {% csrf_token %}
     <header>
         <div class="container-fluid">
             <h1>オセロ</h1>
@@ -251,21 +252,22 @@
             <button type="button" class="btn btn-secondary btn-lg" id="pass-turn">パス</button>
         </div>
     </main>
-    
+
     <hr>
     <footer>
         <small>Copyright&copy;2025 Shiozaki All rights reserved</small>
     </footer>
     <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         //displayTurnIndicator()関数は、プレイヤーターン（黒か白）を表示する関数
         //boardTurnは、'black\'s turn'か'white\'s turn'
         const displayTurnIndicator = (boardTurn) => {
             const turnElement = document.getElementById('turn');
-            if(boardTurn === 'black\'s turn'){
+            if (boardTurn === 'black\'s turn') {
                 turnElement.textContent = '黒'
-            }else if(boardTurn === 'white\'s turn'){
+            } else if (boardTurn === 'white\'s turn') {
                 turnElement.textContent = '白'
-            }else{
+            } else {
                 turnElement.textContent = '不明'
             }
         }
@@ -283,8 +285,8 @@
         }
 
         const initialTurn = '{{ turn|escapejs }}';  // {{turn}} を JSに埋め込む
-        displayTurnIndicator(initialTurn);        
-      
+        displayTurnIndicator(initialTurn);
+
         const initial_board = JSON.parse('{{ board|escapejs }}');  // board を JSON 文字列として埋め込む
 
         const dim1_initial_board = translateArray(initial_board);
@@ -321,6 +323,8 @@
             }
         }
 
+        
+
         //クリックして、オセロの駒を打つ処理
         for (let i = 0; i < 64; i++) {
             document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function (event) {
@@ -336,6 +340,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,  // CSRFトークンをヘッダーに追加
                         },
                         body: JSON.stringify({ cell: cell })
                     });
@@ -366,6 +371,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,  // CSRFトークンをヘッダーに追加
                     },
                     body: JSON.stringify({ turn: 'passed' })
                 });
