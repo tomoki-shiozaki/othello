@@ -289,17 +289,17 @@
         const initialTurn = '{{ turn|escapejs }}';  // {{turn}} を JSに埋め込む
         displayTurnIndicator(initialTurn);
 
-        const initial_board = JSON.parse('{{ board|escapejs }}');  // board を JSON 文字列として埋め込む
+        const initialBoard = JSON.parse('{{ board|escapejs }}');  // board を JSON 文字列として埋め込む
 
-        const dim1_initial_board = translateArray(initial_board);
-        console.log(dim1_initial_board);
+        const dim1InitialBoard = translateArray(initialBoard);
+        console.log(dim1InitialBoard);
 
         for (let i = 0; i < 64; i++) {
-            if (dim1_initial_board[i] === 'black') {
+            if (dim1InitialBoard[i] === 'black') {
                 document.getElementById(`othello-cell${i}`).classList.add('black');
                 document.getElementById(`othello-cell${i}`).classList.remove('white');
                 document.getElementById(`othello-cell${i}`).classList.remove('empty');
-            } else if (dim1_initial_board[i] === 'white') {
+            } else if (dim1InitialBoard[i] === 'white') {
                 document.getElementById(`othello-cell${i}`).classList.add('white');
                 document.getElementById(`othello-cell${i}`).classList.remove('black');
                 document.getElementById(`othello-cell${i}`).classList.remove('empty');
@@ -308,16 +308,16 @@
 
         const updateBoard = (board) => {
             //引数boardはJSON文字列     
-            //dim1_boardは、２次元のボードを１次元の配列にしたもの
-            const dim1_board = translateArray(board);
-            console.log(dim1_board);
+            //dim1Boardは、２次元のボードを１次元の配列にしたもの
+            const dim1Board = translateArray(board);
+            console.log(dim1Board);
 
             for (let i = 0; i < 64; i++) {
-                if (dim1_board[i] === 'black') {
+                if (dim1Board[i] === 'black') {
                     document.getElementById(`othello-cell${i}`).classList.add('black');
                     document.getElementById(`othello-cell${i}`).classList.remove('white');
                     document.getElementById(`othello-cell${i}`).classList.remove('empty');
-                } else if (dim1_board[i] === 'white') {
+                } else if (dim1Board[i] === 'white') {
                     document.getElementById(`othello-cell${i}`).classList.add('white');
                     document.getElementById(`othello-cell${i}`).classList.remove('black');
                     document.getElementById(`othello-cell${i}`).classList.remove('empty');
