@@ -1,0 +1,19 @@
+@startuml er
+skinparam defaultFontName "Noto Sans CJK JP"
+entity "ユーザーアカウント" {
+  +ユーザーID: INT
+  +ユーザー名: VARCHAR255
+  +メールアドレス: VARCHAR255
+  +パスワード: VARCHAR255
+}
+
+entity "ゲーム" {
+  +ゲームID: INT
+  +プレイヤー1 : INT <<FK>>
+  +プレイヤー2 : INT <<FK>>
+  +ターン : VARCHAR15
+  +盤面 : JSON 
+}
+
+"ゲーム" ||--o{ "ユーザーアカウント" : "プレイヤー1, プレイヤー2"
+@enduml

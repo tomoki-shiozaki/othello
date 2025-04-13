@@ -7,10 +7,7 @@ from .logic import Rule
 
 
 # Create your views here.
-# @csrf_exempt  # CSRFトークンを無効化（開発中のみ使用、実際のプロダクションでは適切に対策が必要）
-
-
-def fetch_data(request):
+def place_piece_view(request):
     if request.method == "POST":
         try:
             # リクエストボディをJSONとしてパース

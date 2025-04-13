@@ -1,0 +1,18 @@
+@startuml er
+skinparam defaultFontName "Noto Sans CJK JP"
+entity "ユーザーアカウント" {
+  +ID: int
+  +名前: string
+  +メールアドレス: string
+  +電話番号: string
+}
+
+entity "注文" {
+  +注文ID: int
+  +ユーザーID : int <<FK>>
+  +注文日: date
+  +金額: decimal
+}
+
+"ユーザー" ||--o{ "注文" 
+@enduml
