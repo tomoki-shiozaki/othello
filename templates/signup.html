@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}サインアップ{% endblock title %}
+{% block content %}
+<h2>サインアップ</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">サインアップ</button>
+</form>
+{% endblock content %}

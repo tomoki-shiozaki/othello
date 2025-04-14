@@ -1,3 +1,8 @@
+html {
+    overflow-y: scroll;
+    /* 常に縦スクロールバーを表示 */
+}
+
 body {
     background-color: #f5f5f5;
 }
@@ -12,69 +17,18 @@ header h1 {
     font-size: 3rem;
 }
 
-.turn-indicator {
-    text-align: center;
-    font-size: 1.5rem;
+header h1 a {
+    color: #ffffff;  
+    text-decoration: none;  /* 下線を消す */
+    transition: color 0.2s ease;
 }
 
-#turn {
-    font-size: 2rem;
-}
-
-.othello-grid-container {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    /* 8列の格子 */
-    grid-template-rows: repeat(8, 1fr);
-    /* 8行の格子 */
-    width: 400px;
-    /* 格子の幅 */
-    height: 400px;
-    /* 格子の高さ */
-    border: 2px solid black;
-    /* 格子全体の枠 */
-    margin: 0 auto;
-}
-
-.othello-grid-item {
-    display: flex;
-    justify-content: center;
-    /*横方向の中央ぞろえ*/
-    align-items: center;
-    /*縦方向の中央ぞろえ*/
-    background-color: green;
-    border: 1px solid #ccc;
-    /* セルの枠線 */
-    /* font-size: 20px; */
-}
-
-.othello-grid-cell.black {
-    background-color: black;
-    width: 80%;
-    height: 80%;
-    border-radius: 100%;
-}
-
-.othello-grid-cell.white {
-    background-color: white;
-    width: 80%;
-    height: 80%;
-    border-radius: 100%;
-}
-
-#pass-turn {
-    display: block;
-    margin: 10px auto;
+header h1 a:hover {
+    color: #ffeb3b;  
+    text-decoration: underline; /* ホバー時に下線 */
+    font-weight: bold;
 }
 
 footer {
     text-align: center;
-}
-
-@media (max-width: 600px) {
-    /* スマートフォン用のスタイル */
-    .othello-grid-container {
-        width: 92vw;
-        height: 92vw;
-    }
 }

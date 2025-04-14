@@ -51,7 +51,7 @@ def place_piece_view(request):
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
 
-def home(request):
+def local_match(request):
 
     # game = Game.objects.first()
     # 最新のゲームオブジェクトを取得
@@ -59,7 +59,7 @@ def home(request):
 
     return render(
         request,
-        "home.html",
+        "match/local.html",
         {
             "game": game,
             "turn": game.turn,
