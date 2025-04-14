@@ -2,6 +2,7 @@ from django.db import models
 
 
 # Create your models here.
+# 盤面の初期状態を定義
 def default_settings():
     initial_board = []
     for _ in range(8):

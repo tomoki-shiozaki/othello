@@ -14,8 +14,8 @@ def place_piece_view(request):
             body = json.loads(request.body)
             cell = body.get("cell", 10000)
 
-            # ゲームオブジェクトを取得
-            game = Game.objects.first()
+            # 最新のゲームオブジェクトを取得
+            game = Game.objects.last()
             board = game.board
             turn = game.turn
 
@@ -53,7 +53,9 @@ def place_piece_view(request):
 
 def home(request):
 
-    game = Game.objects.first()
+    # game = Game.objects.first()
+    # 最新のゲームオブジェクトを取得
+    game = Game.objects.last()
 
     return render(
         request,
@@ -68,18 +70,9 @@ def home(request):
 
 
 def start_new_game(request):
-    Game.objects.all().delete()
-    # 盤面の初期状態を定義
-    initial_board = []
-    for _ in range(8):
-        initial_board.append(["empty"] * 8)
-    initial_board[3][3] = "black"
-    initial_board[4][4] = "black"
-    initial_board[3][4] = "white"
-    initial_board[4][3] = "white"
 
-    # ゲームオブジェクトを作成し、初期盤面やターンを設定
-    Game.objects.create(board=initial_board, turn="black's turn")
+    # ゲームオブジェクトを作成
+    Game.objects.create()
     # 新しいゲームが作成されたら、ホームページ（ゲーム進行ページ）にリダイレクト
     return redirect("/")
 
@@ -87,8 +80,8 @@ def start_new_game(request):
 def pass_turn(request):
     if request.method == "POST":
         try:
-            # ゲームオブジェクトを取得
-            game = Game.objects.first()
+            # 最新のゲームオブジェクトを取得
+            game = Game.objects.last()
             if game.turn == "black's turn":
                 game.turn = "white's turn"
             else:
