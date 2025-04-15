@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # Local
     "accounts.apps.AccountsConfig",
     "othello.apps.OthelloConfig",
+    "home.apps.HomeConfig",
 ]
 
 MIDDLEWARE = [
