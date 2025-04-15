@@ -8,6 +8,7 @@ django = "*"
 django-cors-headers = "*"
 gunicorn = "*"
 whitenoise = "*"
+environs = {extras = ["django"], version = "*"}
 
 [dev-packages]
 
