@@ -45,11 +45,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # 3rd-party apps
     "corsheaders",
+    "crispy_forms",
+    "crispy_bootstrap5",
     # Local
     "accounts.apps.AccountsConfig",
     "othello.apps.OthelloConfig",
     "home.apps.HomeConfig",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

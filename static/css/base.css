@@ -11,25 +11,27 @@ body {
     margin: 0;
 }
 
-header {
+/* header {
     background-color: green;
     color: white;
+} */
+
+#site-name {
+    /* text-align: center; */
+    font-size: 2rem;
 }
 
-header h1 {
-    text-align: center;
-    font-size: 3rem;
-}
-
-header h1 a {
-    color: #ffffff;  
-    text-decoration: none;  /* 下線を消す */
+#site-name {
+    color: #ffffff;
+    text-decoration: none;
+    /* 下線を消す */
     transition: color 0.2s ease;
 }
 
-header h1 a:hover {
-    color: #ffeb3b;  
-    text-decoration: underline; /* ホバー時に下線 */
+#site-name:hover {
+    color: #ffeb3b;
+    text-decoration: underline;
+    /* ホバー時に下線 */
     font-weight: bold;
 }
 

@@ -9,6 +9,8 @@ django-cors-headers = "*"
 gunicorn = "*"
 whitenoise = "*"
 environs = {extras = ["django"], version = "*"}
+django-crispy-forms = "*"
+crispy-bootstrap5 = "*"
 
 [dev-packages]
 
