@@ -14,7 +14,8 @@ def default_settings():
     return initial_board
 
 
-class Game(models.Model):
+class AuthenticatedLocalMatch(models.Model):
+    black_player = models.CharField(max_length=50)
     turn = models.CharField(
         max_length=15, default="black's turn"
     )  #'black's turn', 'white's turn'
