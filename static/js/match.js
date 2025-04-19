@@ -1,12 +1,20 @@
-
 const csrfToken = document.getElementById('csrf-data').dataset.csrf;
-const initialTurn = document.getElementById('initial-turn').dataset.initialTurn;
-console.log(initialTurn)
-console.log(typeof initialTurn)
+
+const initialMatchElement = document.getElementById('initial-match-data');
+const matchId = initialMatchElement.dataset.matchId;
+const initialTurn = initialMatchElement.dataset.initialTurn;
+console.log(initialTurn);
+const initialBoard = JSON.parse(initialMatchElement.dataset.initialBoard);
+
+// const initialTurn = document.getElementById('initial-turn').dataset.initialTurn;
+// console.log(initialTurn)
+// console.log(typeof initialTurn)
+
 // console.log(document.getElementById('initial-board').dataset.initialBoard)
-console.log(document.getElementById('initial-board').dataset.initialBoard);
-console.log(typeof document.getElementById('initial-board').dataset.initialBoard)
-const initialBoard = JSON.parse(document.getElementById('initial-board').dataset.initialBoard);
+
+// console.log(document.getElementById('initial-board').dataset.initialBoard);
+// console.log(typeof document.getElementById('initial-board').dataset.initialBoard)
+// const initialBoard = JSON.parse(document.getElementById('initial-board').dataset.initialBoard);
 // エスケープされたダブルクォートを解除（\" を " に変換）
 
 // const initialBoardData = document.getElementById('initial-board').textContent;
@@ -14,9 +22,11 @@ const initialBoard = JSON.parse(document.getElementById('initial-board').dataset
 // const initialBoard = JSON.parse(initialBoardData);
 // // const initialBoard = JSON.parse(document.getElementById('initial-board').innerHTML);
 // console.log(initialBoard);
-console.log(initialBoard);
-console.log(typeof initialBoard);
-console.log(initialBoard[0]);
+
+// console.log(initialBoard);
+// console.log(typeof initialBoard);
+// console.log(initialBoard[0]);
+
 // const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 //displayTurnIndicator()関数は、プレイヤーターン（黒か白）を表示する関数
 //boardTurnは、'black\'s turn'か'white\'s turn'
@@ -90,9 +100,10 @@ for (let i = 0; i < 64; i++) {
 
         const cell = i;
         const responseDiv = document.getElementById('response');
+        
 
         try {
-            const response = await fetch('/fetch_data/', {
+            const response = await fetch(`/match/local/place-piece/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +134,7 @@ document.getElementById('pass-turn').addEventListener('click', async function (e
     event.preventDefault();  // フォームのデフォルト動作を防止
 
     try {
-        const response = await fetch('/pass_turn/', {
+        const response = await fetch('/match/pass_turn/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

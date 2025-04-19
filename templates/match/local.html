@@ -13,9 +13,14 @@
 {% block content %}
 
 <div id="csrf-data" data-csrf="{{ csrf_token }}"></div>
-<div id="initial-turn" data-initial-turn="{{ turn }}"></div>
+<div id="initial-match-data"
+     data-match-id="{{ match.pk }}"
+     data-initial-turn="{{ match.turn }}"
+     data-initial-board="{{ board }}">
+</div>
+<!-- <div id="initial-turn" data-initial-turn="{{ game.turn }}"></div> -->
 <!-- <div id="initial-board" data-initial-board="{{ board|json_script }}"></div> -->
-<div id="initial-board" data-initial-board="{{ board }}"></div>
+<!-- <div id="initial-board" data-initial-board="{{ board }}"></div> -->
 
 <!-- {% csrf_token %} -->
 
