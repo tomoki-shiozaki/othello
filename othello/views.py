@@ -69,58 +69,17 @@ class AuthenticatedLocalMatchPlayView(
 #     template_name = "article_edit.html"
 
 
-# class AuthenticatedLocalMatchPlacePieceView(
-#     LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, View
-# ):
-#     def post(self, request, pk):
-#         game = self.get_object()
-#         board = game.board
-#         turn = game.turn
-#         try:
-#             # リクエストボディをJSONとしてパース
-#             body = json.loads(request.body)
-#             cell = body.get("cell", 10000)
+class AuthenticatedLocalMatchPlacePieceView(View):
+    def post(self, request):
 
-#             # ゲームの進行処理
-#             rule = Rule(
-#                 board, cell, turn
-#             )  # Ruleクラスは、ゲームのルールを記述したクラス
-#             if (
-#                 rule.can_place_piece()
-#             ):  # can_place_piece()メソッドは、駒をおけるときにTrue
-#                 rule.place_piece()  # 駒を打って、盤面を書き換える
-#                 rule.change_turn()
-
-#                 # ゲームの盤面とターンを変更
-#                 game.board = rule.board
-#                 game.turn = rule.turn
-
-#                 # 変更を保存
-#                 game.save()
-
-#                 # レスポンスデータの作成
-#                 response_data = {
-#                     "message": f"It's {game.turn}! You put the piece in the {cell} cell.",
-#                     "received": body,
-#                     "board": game.board,
-#                     "turn": game.turn,
-#                 }
-
-#                 return JsonResponse(response_data)
-
-#         except json.JSONDecodeError:
-#             return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-
-def place_piece_view(request):
-    if request.method == "POST":
         try:
             # リクエストボディをJSONとしてパース
             body = json.loads(request.body)
             cell = body.get("cell", 10000)
-
-            # 最新のゲームオブジェクトを取得
-            game = AuthenticatedLocalMatch.objects.last()
+            pk = body.get("pk")
+            game = AuthenticatedLocalMatch.objects.get(
+                pk=pk, authenticated_user=self.request.user
+            )
             board = game.board
             turn = game.turn
 
@@ -141,7 +100,7 @@ def place_piece_view(request):
                 # 変更を保存
                 game.save()
 
-            # レスポンスデータの作成
+                # レスポンスデータの作成
             response_data = {
                 "message": f"It's {game.turn}! You put the piece in the {cell} cell.",
                 "received": body,
@@ -153,25 +112,68 @@ def place_piece_view(request):
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
-    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 
-def local_match(request):
+# def place_piece_view(request):
+#     if request.method == "POST":
+#         try:
+#             # リクエストボディをJSONとしてパース
+#             body = json.loads(request.body)
+#             cell = body.get("cell", 10000)
 
-    # game = Game.objects.first()
-    # 最新のゲームオブジェクトを取得
-    game = AuthenticatedLocalMatch.objects.last()
+#             # 最新のゲームオブジェクトを取得
+#             game = AuthenticatedLocalMatch.objects.last()
+#             board = game.board
+#             turn = game.turn
 
-    return render(
-        request,
-        "match/local.html",
-        {
-            "game": game,
-            "turn": game.turn,
-            "board": json.dumps(game.board),  # board を JSON 形式に変換して渡す
-            #'board': json.dumps(game.board)  # board を JSON 形式に変換して渡す
-        },
-    )
+#             # ゲームの進行処理
+#             rule = Rule(
+#                 board, cell, turn
+#             )  # Ruleクラスは、ゲームのルールを記述したクラス
+#             if (
+#                 rule.can_place_piece()
+#             ):  # can_place_piece()メソッドは、駒をおけるときにTrue
+#                 rule.place_piece()  # 駒を打って、盤面を書き換える
+#                 rule.change_turn()
+
+#                 # ゲームの盤面とターンを変更
+#                 game.board = rule.board
+#                 game.turn = rule.turn
+
+#                 # 変更を保存
+#                 game.save()
+
+#             # レスポンスデータの作成
+#             response_data = {
+#                 "message": f"It's {game.turn}! You put the piece in the {cell} cell.",
+#                 "received": body,
+#                 "board": game.board,
+#                 "turn": game.turn,
+#             }
+
+#             return JsonResponse(response_data)
+
+#         except json.JSONDecodeError:
+#             return JsonResponse({"error": "Invalid JSON"}, status=400)
+#     return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
+# def local_match(request):
+
+#     # game = Game.objects.first()
+#     # 最新のゲームオブジェクトを取得
+#     game = AuthenticatedLocalMatch.objects.last()
+
+#     return render(
+#         request,
+#         "match/local.html",
+#         {
+#             "game": game,
+#             "turn": game.turn,
+#             "board": json.dumps(game.board),  # board を JSON 形式に変換して渡す
+#             #'board': json.dumps(game.board)  # board を JSON 形式に変換して渡す
+#         },
+#     )
 
 
 def start_new_game(request):
@@ -185,8 +187,13 @@ def start_new_game(request):
 def pass_turn(request):
     if request.method == "POST":
         try:
+            body = json.loads(request.body)
+            pk = body.get("pk")
+            game = AuthenticatedLocalMatch.objects.get(
+                pk=pk, authenticated_user=request.user
+            )
             # 最新のゲームオブジェクトを取得
-            game = AuthenticatedLocalMatch.objects.last()
+            # game = AuthenticatedLocalMatch.objects.last()
             if game.turn == "black's turn":
                 game.turn = "white's turn"
             else:

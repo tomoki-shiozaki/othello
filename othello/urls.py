@@ -35,11 +35,11 @@ urlpatterns = [
     path("start_new_game/", views.start_new_game, name="start_new_game"),
     # ゲーム進行管理ページ（トップページ）
     # path("", views.home, name="home"),
-    path("local/authenticated/", views.local_match, name="authenticated_local_match"),
-    # オセロの駒を打つビュー
+    # path("local/authenticated/", views.local_match, name="authenticated_local_match"),
+    # # オセロの駒を打つビュー
     path(
         "local/place-piece/",
-        views.place_piece_view,
+        views.AuthenticatedLocalMatchPlacePieceView.as_view(),
         name="place-piece",
     ),
     # # オセロの駒を打つビュー

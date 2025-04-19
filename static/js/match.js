@@ -1,4 +1,9 @@
+// if (typeof csrfToken === 'undefined') {
+    
+// }
+
 const csrfToken = document.getElementById('csrf-data').dataset.csrf;
+
 
 const initialMatchElement = document.getElementById('initial-match-data');
 const matchId = initialMatchElement.dataset.matchId;
@@ -39,7 +44,7 @@ const displayTurnIndicator = (boardTurn) => {
     } else {
         turnElement.textContent = '不明'
     }
-}
+};
 
 //モデルのboard---各セルをblack, white, emptyで管理する---は1次元配列
 //この2次元配列を1次元配列に変換する関数
@@ -72,7 +77,7 @@ for (let i = 0; i < 64; i++) {
         document.getElementById(`othello-cell${i}`).classList.remove('black');
         document.getElementById(`othello-cell${i}`).classList.remove('empty');
     }
-}
+};
 
 const updateBoard = (board) => {
     //引数boardはJSON文字列     
@@ -91,7 +96,7 @@ const updateBoard = (board) => {
             document.getElementById(`othello-cell${i}`).classList.remove('empty');
         }
     }
-}
+};
 
 //クリックして、オセロの駒を打つ処理
 for (let i = 0; i < 64; i++) {
@@ -100,16 +105,16 @@ for (let i = 0; i < 64; i++) {
 
         const cell = i;
         const responseDiv = document.getElementById('response');
-        
+
 
         try {
-            const response = await fetch(`/match/local/place-piece/`, {
+            const response = await fetch('/match/local/place-piece/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
                 },
-                body: JSON.stringify({ cell: cell })
+                body: JSON.stringify({ cell: cell, pk: matchId })
             });
 
             const data = await response.json();
@@ -127,7 +132,7 @@ for (let i = 0; i < 64; i++) {
             responseDiv.innerHTML = `<p>Network error: ${error}</p>`;
         }
     });
-}
+};
 
 //パス機能
 document.getElementById('pass-turn').addEventListener('click', async function (event) {
@@ -140,7 +145,7 @@ document.getElementById('pass-turn').addEventListener('click', async function (e
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
             },
-            body: JSON.stringify({ turn: 'passed' })
+            body: JSON.stringify({ turn: 'passed', pk: matchId })
         });
 
         const data = await response.json();
@@ -154,5 +159,6 @@ document.getElementById('pass-turn').addEventListener('click', async function (e
     } catch (error) {
         console.log(`Network error: ${error}`);
     }
-})
+});
 
+console.log(typeof csrfToken)
