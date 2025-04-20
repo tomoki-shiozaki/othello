@@ -55,6 +55,14 @@ class AuthenticatedLocalMatchPlayView(
         )
 
 
+class AuthenticatedLocalMatchDeleteView(
+    LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, DeleteView
+):
+    model = AuthenticatedLocalMatch
+    template_name = "match/local/delete.html"
+    success_url = reverse_lazy("local_match_list")
+
+
 # class ArticleDetailView(DetailView):
 #     model = AuthenticatedLocalMatch
 #     template_name = "match/local/detail.html"

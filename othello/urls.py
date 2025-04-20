@@ -5,7 +5,7 @@ from .views import (
     AuthenticatedLocalMatchListView,
     AuthenticatedLocalMatchPlayView,
     # AuthenticatedLocalMatchDetailView,
-    # AuthenticatedLocalMatchDeleteView,
+    AuthenticatedLocalMatchDeleteView,
 )
 
 urlpatterns = [
@@ -20,11 +20,11 @@ urlpatterns = [
     #     AuthenticatedLocalMatchDetailView.as_view(),
     #     name="local_match_detail",
     # ),
-    # path(
-    #     "local/<int:pk>/delete/",
-    #     AuthenticatedLocalMatchDeleteView.as_view(),
-    #     name="local_match_delete",
-    # ),
+    path(
+        "local/<int:pk>/delete/",
+        AuthenticatedLocalMatchDeleteView.as_view(),
+        name="local_match_delete",
+    ),
     # ログインユーザーが過去のローカル対局記録を確認するためのURL
     path(
         "local/",

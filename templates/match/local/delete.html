@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>対局の削除</h1>
+<form action="" method="post">{% csrf_token %}
+    <p>この対局を削除しますか?</p>
+    <button class="btn btn-danger ml-2" type="submit">削除する</button>
+</form>
+{% endblock content %}

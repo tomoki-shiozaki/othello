@@ -1,9 +1,4 @@
-// if (typeof csrfToken === 'undefined') {
-    
-// }
-
 const csrfToken = document.getElementById('csrf-data').dataset.csrf;
-
 
 const initialMatchElement = document.getElementById('initial-match-data');
 const matchId = initialMatchElement.dataset.matchId;
