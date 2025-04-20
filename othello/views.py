@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views import View
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
@@ -61,6 +61,21 @@ class AuthenticatedLocalMatchDeleteView(
     model = AuthenticatedLocalMatch
     template_name = "match/local/delete.html"
     success_url = reverse_lazy("local_match_list")
+
+
+class AuthenticatedLocalMatchCreateView(
+    LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, CreateView
+):
+    model = AuthenticatedLocalMatch
+    template_name = "match/local/new.html"
+    fields = (
+        "black_player",
+        "white_player",
+    )
+
+    def form_valid(self, form):  # new
+        form.instance.authenticated_user = self.request.user
+        return super().form_valid(form)
 
 
 # class ArticleDetailView(DetailView):

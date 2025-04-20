@@ -37,4 +37,4 @@ class AuthenticatedLocalMatch(models.Model):
         return f"{self.black_player}と{self.white_player}の対局"
 
     def get_absolute_url(self):
-        return reverse("authenticated_local_match", args=[str(self.id)])
+        return reverse("local_match_play", args=[str(self.id)])
