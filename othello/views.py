@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 
 from .models import AuthenticatedLocalMatch
-from .logic import Rule
+from .logic import Rule, end_game
 
 
 # Create your views here.
@@ -232,6 +232,27 @@ def pass_turn(request):
             }
 
             return JsonResponse(response_data)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+
+def end_game_view(request):
+    if request.method == "POST":
+        try:
+            body = json.loads(request.body)
+            pk = body.get("pk")
+            game = AuthenticatedLocalMatch.objects.get(
+                pk=pk, authenticated_user=request.user
+            )
+            results = end_game(game.board)
+            # 対局結果を格納する
+            game.result = results["winner"]
+            # 変更を保存
+            game.save()
+
+            return JsonResponse(results)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)

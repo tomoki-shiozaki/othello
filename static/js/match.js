@@ -5,6 +5,7 @@ const matchId = initialMatchElement.dataset.matchId;
 const initialTurn = initialMatchElement.dataset.initialTurn;
 console.log(initialTurn);
 const initialBoard = JSON.parse(initialMatchElement.dataset.initialBoard);
+const initialStatus = initialMatchElement.dataset.initialStatus;
 
 // const initialTurn = document.getElementById('initial-turn').dataset.initialTurn;
 // console.log(initialTurn)
@@ -93,6 +94,48 @@ const updateBoard = (board) => {
     }
 };
 
+// result = { "blackCount": black_count, "whiteCount": white_count, "winner": winner, }
+const displayGameResult = (result) => {
+    const countResult = document.querySelector("#game-result .counts");
+    const gameResult = document.querySelector("#game-result .result");
+    countResult.innerHTML = `黒${result["blackCount"]}枚、白${result["whiteCount"]}枚。`
+    if (result["winner"] === "black") {
+        gameResult.innerHTML = `黒の勝ちです。`
+    } else if (result["winner"] === "white") {
+        gameResult.innerHTML = `白の勝ちです。`
+    } else {
+        gameResult.innerHTML = `引き分けです。`
+    }
+};
+
+// ページ読み込み時に、対局が終了していたら、結果を表示する
+if (initialStatus !== "対局中") {
+    window.addEventListener("DOMContentLoaded", async function (event) {
+        event.preventDefault();  // フォームのデフォルト動作を防止
+        try {
+            const response = await fetch('/match/end-game/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
+                },
+                body: JSON.stringify({ pk: matchId })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                displayGameResult(data);
+                console.log(data);
+            } else {
+                console.log(`Error: ${data.error}`);
+            }
+        } catch (error) {
+            console.log(`Network error: ${error}`);
+        }
+    });
+}
+
 //クリックして、オセロの駒を打つ処理
 for (let i = 0; i < 64; i++) {
     document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function (event) {
@@ -129,31 +172,36 @@ for (let i = 0; i < 64; i++) {
     });
 };
 
-//パス機能
-document.getElementById('pass-turn').addEventListener('click', async function (event) {
+// 終局処理
+document.getElementById('end-game').addEventListener('click', async function (event) {
     event.preventDefault();  // フォームのデフォルト動作を防止
+    const answer = confirm("本当にゲームを終了しますか？OKとすると、黒白それぞれの枚数を数えて、勝敗を決定します。");
+    if (answer) {
+        try {
+            const response = await fetch('/match/end-game/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
+                },
+                body: JSON.stringify({ pk: matchId })
+            });
 
-    try {
-        const response = await fetch('/match/pass_turn/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
-            },
-            body: JSON.stringify({ turn: 'passed', pk: matchId })
-        });
+            const data = await response.json();
 
-        const data = await response.json();
-
-        if (response.ok) {
-            displayTurnIndicator(data.turn);
-            console.log(`${data.message}`);
-        } else {
-            console.log(`Error: ${data.error}`);
+            if (response.ok) {
+                displayGameResult(data);
+                console.log(data);
+            } else {
+                console.log(`Error: ${data.error}`);
+            }
+        } catch (error) {
+            console.log(`Network error: ${error}`);
         }
-    } catch (error) {
-        console.log(`Network error: ${error}`);
     }
 });
+
+
+
 
 console.log(typeof csrfToken)

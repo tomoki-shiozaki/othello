@@ -48,9 +48,48 @@
     border-radius: 100%;
 }
 
-#pass-turn {
-    display: block;
+.othello-button-container {
+    display: flex;
+    /* ボタンを横並びに */
+    gap: 20px;
+    /* ボタンの間隔を空ける */
+    justify-content: center;
     margin: 10px auto;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* #pass-turn {
+        display: block;
+        margin: 10px auto;
+    } */
+
+.result-box {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Helvetica", sans-serif;
+    width: fit-content;
+    margin: 20px auto;
+}
+
+.result-box .counts {
+    font-size: 18px;
+    margin: 0;
+    color: #333;
+}
+
+.result-box .result {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 10px;
 }
 
 @media (max-width: 600px) {

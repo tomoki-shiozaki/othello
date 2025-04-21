@@ -52,4 +52,5 @@ urlpatterns = [
     # path("fetch_data/", views.place_piece_view, name="fetch_data"),
     # ターンをパスするリクエスト
     path("pass_turn/", views.pass_turn, name="pass_turn"),
+    path("end-game/", views.end_game_view, name="end_game"),
 ]

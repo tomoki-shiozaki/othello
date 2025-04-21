@@ -145,3 +145,27 @@ class Rule:
         # 白の手番の時は、黒の手番に変更する
         else:
             self.turn = "black's turn"
+
+
+def end_game(board):
+    black_count = 0
+    white_count = 0
+
+    for row in board:
+        for cell in row:
+            if cell == "black":
+                black_count += 1
+            elif cell == "white":
+                white_count += 1
+
+    if black_count > white_count:
+        winner = "black"
+    elif black_count < white_count:
+        winner = "white"
+    else:
+        winner = "draw"
+    return {
+        "blackCount": black_count,
+        "whiteCount": white_count,
+        "winner": winner,
+    }
