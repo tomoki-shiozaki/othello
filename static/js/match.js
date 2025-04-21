@@ -172,6 +172,33 @@ for (let i = 0; i < 64; i++) {
     });
 };
 
+//パス機能
+document.getElementById('pass-turn').addEventListener('click', async function (event) {
+    event.preventDefault();  // フォームのデフォルト動作を防止
+
+    try {
+        const response = await fetch('/match/pass_turn/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
+            },
+            body: JSON.stringify({ turn: 'passed', pk: matchId })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            displayTurnIndicator(data.turn);
+            console.log(`${data.message}`);
+        } else {
+            console.log(`Error: ${data.error}`);
+        }
+    } catch (error) {
+        console.log(`Network error: ${error}`);
+    }
+});
+
 // 終局処理
 document.getElementById('end-game').addEventListener('click', async function (event) {
     event.preventDefault();  // フォームのデフォルト動作を防止
