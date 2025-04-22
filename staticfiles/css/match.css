@@ -1,0 +1,102 @@
+.turn-indicator {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+#turn {
+    font-size: 2rem;
+}
+
+.othello-grid-container {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    /* 8列の格子 */
+    grid-template-rows: repeat(8, 1fr);
+    /* 8行の格子 */
+    width: 400px;
+    /* 格子の幅 */
+    height: 400px;
+    /* 格子の高さ */
+    border: 2px solid black;
+    /* 格子全体の枠 */
+    margin: 0 auto;
+}
+
+.othello-grid-item {
+    display: flex;
+    justify-content: center;
+    /*横方向の中央ぞろえ*/
+    align-items: center;
+    /*縦方向の中央ぞろえ*/
+    background-color: green;
+    border: 1px solid #ccc;
+    /* セルの枠線 */
+    /* font-size: 20px; */
+}
+
+.othello-grid-cell.black {
+    background-color: black;
+    width: 80%;
+    height: 80%;
+    border-radius: 100%;
+}
+
+.othello-grid-cell.white {
+    background-color: white;
+    width: 80%;
+    height: 80%;
+    border-radius: 100%;
+}
+
+.othello-button-container {
+    display: flex;
+    /* ボタンを横並びに */
+    gap: 20px;
+    /* ボタンの間隔を空ける */
+    justify-content: center;
+    margin: 10px auto;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* #pass-turn {
+        display: block;
+        margin: 10px auto;
+    } */
+
+.result-box {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Helvetica", sans-serif;
+    width: fit-content;
+    margin: 20px auto;
+}
+
+.result-box .counts {
+    font-size: 18px;
+    margin: 0;
+    color: #333;
+}
+
+.result-box .result {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+
+    /* スマートフォン用のスタイル */
+    .othello-grid-container {
+        width: 92vw;
+        height: 92vw;
+    }
+}
