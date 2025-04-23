@@ -11,6 +11,7 @@ whitenoise = "*"
 environs = {extras = ["django"], version = "*"}
 django-crispy-forms = "*"
 crispy-bootstrap5 = "*"
+psycopg2 = "*"
 
 [dev-packages]
 

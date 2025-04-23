@@ -13,9 +13,12 @@
 {% block content %}
 
 <div id="csrf-data" data-csrf="{{ csrf_token }}"></div>
-<div id="initial-turn" data-initial-turn="{{ turn }}"></div>
+<div id="initial-match-data" data-match-id="{{ match.pk }}" data-initial-turn="{{ match.turn }}"
+    data-initial-board="{{ board }}" data-initial-status="{{ match.result }}">
+</div>
+<!-- <div id="initial-turn" data-initial-turn="{{ game.turn }}"></div> -->
 <!-- <div id="initial-board" data-initial-board="{{ board|json_script }}"></div> -->
-<div id="initial-board" data-initial-board="{{ board }}"></div>
+<!-- <div id="initial-board" data-initial-board="{{ board }}"></div> -->
 
 <!-- {% csrf_token %} -->
 
@@ -244,12 +247,23 @@
             }
         }
     </script> -->
+<div class="othello-button-container">
+    <button type="button" class="btn btn-secondary btn-lg" id="pass-turn">パス</button>
+    <button type="button" class="btn btn-secondary btn-lg" id="end-game">終局</button>
+</div>
+<div class="game-result">
+</div>
 
-<button type="button" class="btn btn-secondary btn-lg" id="pass-turn">パス</button>
+<div id="game-result" class="result-box">
+    <p>黒: {{match.black_player}}さん　白: {{match.white_player}}さん</p>
+    <p class="counts"></p>
+    <p class="result">対局中</p>
+</div>
+
+
+{% endblock content %}
 
 {% block extra_js %}
 <!-- JavaScript-->
 <script src="{% static 'js/match.js' %}"></script>
 {% endblock %}
-
-{% endblock content %}

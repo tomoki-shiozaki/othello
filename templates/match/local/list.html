@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}ゲーム履歴{% endblock title %}
+
+{% block content %}
+
+{% for match in object_list %}
+<div class="card">
+    <div class="card-header">
+        <span class="font-weight-bold">黒：{{ match.black_player }}さん vs 白：{{ match.white_player }}さん</span> &middot;
+        <span class="text-muted">最後の着手時刻
+            {{ match.updated_at }}</span>
+    </div>
+    <div class="card-body">
+        {% if match.result == "black" %}
+        黒の{{ match.black_player }}さんの勝ちです
+        {% elif match.result == "white" %}
+        白の{{ match.white_player }}さんの勝ちです
+        {% elif match.result == "draw" %}
+        引き分けです
+        {% else %}
+        対局中です
+        {% endif %}
+    </div>
+    <div class="card-footer text-center text-muted">
+        <a href="{% url 'local_match_play' pk=match.pk %}">対局画面へ</a> | <a href="{% url 'local_match_delete' pk=match.pk %}">削除</a>
+    </div>
+</div>
+<br />
+{% empty %}
+<p>ゲーム履歴はありません</p>
+{% endfor %}
+{% endblock content %}
