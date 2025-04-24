@@ -7,23 +7,20 @@
 <!-- オセロの対戦画面専用のCSSを読み込む -->
 <link href="{% static 'css/match.css' %}" rel="stylesheet">
 {% endblock %}
-<!-- CSS
-<link href="{% static 'css/base.css' %}" rel="stylesheet"> -->
 
 {% block content %}
 
+<!-- JavaScriptで使用するCSRFトークンとゲーム初期データを、data属性でHTMLに埋め込む -->
 <div id="csrf-data" data-csrf="{{ csrf_token }}"></div>
 <div id="initial-match-data" data-match-id="{{ match.pk }}" data-initial-turn="{{ match.turn }}"
     data-initial-board="{{ board }}" data-initial-status="{{ match.result }}">
 </div>
-<!-- <div id="initial-turn" data-initial-turn="{{ game.turn }}"></div> -->
-<!-- <div id="initial-board" data-initial-board="{{ board|json_script }}"></div> -->
-<!-- <div id="initial-board" data-initial-board="{{ board }}"></div> -->
 
-<!-- {% csrf_token %} -->
-
-
+<!-- 現在のターン（プレイヤー）を表示する -->
 <div class="turn-indicator"><span id="turn" name="turn"></span>の番</div>
+
+
+<!-- <div class="othello-grid-container"></div> -->
 
 <!--オセロの盤面-->
 <div class="othello-grid-container">
