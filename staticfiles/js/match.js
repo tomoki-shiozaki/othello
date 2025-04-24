@@ -1,34 +1,15 @@
+// CSRFトークンとゲームの初期データを読み込む。
+// 初期データは、読み込み時のゲーム表示に使う。
 const csrfToken = document.getElementById('csrf-data').dataset.csrf;
 
 const initialMatchElement = document.getElementById('initial-match-data');
 const matchId = initialMatchElement.dataset.matchId;
 const initialTurn = initialMatchElement.dataset.initialTurn;
-console.log(initialTurn);
 const initialBoard = JSON.parse(initialMatchElement.dataset.initialBoard);
 const initialStatus = initialMatchElement.dataset.initialStatus;
 
-// const initialTurn = document.getElementById('initial-turn').dataset.initialTurn;
-// console.log(initialTurn)
-// console.log(typeof initialTurn)
+// --- ターン管理: 表示と制御に関する処理 ---
 
-// console.log(document.getElementById('initial-board').dataset.initialBoard)
-
-// console.log(document.getElementById('initial-board').dataset.initialBoard);
-// console.log(typeof document.getElementById('initial-board').dataset.initialBoard)
-// const initialBoard = JSON.parse(document.getElementById('initial-board').dataset.initialBoard);
-// エスケープされたダブルクォートを解除（\" を " に変換）
-
-// const initialBoardData = document.getElementById('initial-board').textContent;
-// console.log(initialBoardData)
-// const initialBoard = JSON.parse(initialBoardData);
-// // const initialBoard = JSON.parse(document.getElementById('initial-board').innerHTML);
-// console.log(initialBoard);
-
-// console.log(initialBoard);
-// console.log(typeof initialBoard);
-// console.log(initialBoard[0]);
-
-// const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 //displayTurnIndicator()関数は、プレイヤーターン（黒か白）を表示する関数
 //boardTurnは、'black\'s turn'か'white\'s turn'
 const displayTurnIndicator = (boardTurn) => {
@@ -42,6 +23,34 @@ const displayTurnIndicator = (boardTurn) => {
     }
 };
 
+// 読み込み時に、ターンを表示する
+displayTurnIndicator(initialTurn);
+
+//パスボタンを押したときに、ターンを変更する関数
+document.getElementById('pass-turn').addEventListener('click', async function (event) {
+    try {
+        const response = await fetch('/match/pass_turn/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
+            },
+            body: JSON.stringify({ turn: 'passed', pk: matchId })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            displayTurnIndicator(data.turn);
+            console.log(`${data.message}`);
+        } else {
+            console.log(`Error: ${data.error}`);
+        }
+    } catch (error) {
+        console.log(`Network error: ${error}`);
+    }
+});
+
 //モデルのboard---各セルをblack, white, emptyで管理する---は1次元配列
 //この2次元配列を1次元配列に変換する関数
 const translateArray = (dim2_list) => {
@@ -53,9 +62,6 @@ const translateArray = (dim2_list) => {
     }
     return dim1_list
 };
-
-// const initialTurn = '{{ turn|escapejs }}';  // {{turn}} を JSに埋め込む
-displayTurnIndicator(initialTurn);
 
 // const initialBoard = JSON.parse('{{ board|escapejs }}');  // board を JSON 文字列として埋め込む
 
@@ -171,33 +177,6 @@ for (let i = 0; i < 64; i++) {
         }
     });
 };
-
-//パス機能
-document.getElementById('pass-turn').addEventListener('click', async function (event) {
-    event.preventDefault();  // フォームのデフォルト動作を防止
-
-    try {
-        const response = await fetch('/match/pass_turn/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
-            },
-            body: JSON.stringify({ turn: 'passed', pk: matchId })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            displayTurnIndicator(data.turn);
-            console.log(`${data.message}`);
-        } else {
-            console.log(`Error: ${data.error}`);
-        }
-    } catch (error) {
-        console.log(`Network error: ${error}`);
-    }
-});
 
 // 終局処理
 document.getElementById('end-game').addEventListener('click', async function (event) {
