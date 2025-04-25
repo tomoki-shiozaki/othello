@@ -51,53 +51,74 @@ document.getElementById('pass-turn').addEventListener('click', async function (e
     }
 });
 
-//モデルのboard---各セルをblack, white, emptyで管理する---は1次元配列
-//この2次元配列を1次元配列に変換する関数
-const translateArray = (dim2_list) => {
-    const dim1_list = []
+
+// --- 盤面管理: 表示と駒を打つ処理 ---
+
+//モデルでは、オセロの盤面を表すboard---各セルをblack, white, emptyで管理する---は2次元配列
+//一方、オセロの盤面をフロントエンド側で1次元配列で表した
+// 2次元配列を1次元配列に変換するための関数
+const flattenBoard = (board2D) => {
+    const flatBoard = []
     for (let i = 0; i < 8; i++) {
         for (let j = 0; j < 8; j++) {
-            dim1_list.push(dim2_list[i][j])
+            flatBoard.push(board2D[i][j])
         }
     }
-    return dim1_list
+    return flatBoard
 };
 
-// const initialBoard = JSON.parse('{{ board|escapejs }}');  // board を JSON 文字列として埋め込む
-
-console.log(initialBoard[3][4]);
-const dim1InitialBoard = translateArray(initialBoard);
-console.log(dim1InitialBoard);
-
-for (let i = 0; i < 64; i++) {
-    if (dim1InitialBoard[i] === 'black') {
-        document.getElementById(`othello-cell${i}`).classList.add('black');
-        document.getElementById(`othello-cell${i}`).classList.remove('white');
-        document.getElementById(`othello-cell${i}`).classList.remove('empty');
-    } else if (dim1InitialBoard[i] === 'white') {
-        document.getElementById(`othello-cell${i}`).classList.add('white');
-        document.getElementById(`othello-cell${i}`).classList.remove('black');
-        document.getElementById(`othello-cell${i}`).classList.remove('empty');
-    }
-};
-
-const updateBoard = (board) => {
-    //引数boardはJSON文字列     
-    //dim1Boardは、２次元のボードを１次元の配列にしたもの
-    const dim1Board = translateArray(board);
-    console.log(dim1Board);
-
+// 盤面を表示する関数
+const displayBoard = (flatBoard) => {
     for (let i = 0; i < 64; i++) {
-        if (dim1Board[i] === 'black') {
-            document.getElementById(`othello-cell${i}`).classList.add('black');
-            document.getElementById(`othello-cell${i}`).classList.remove('white');
-            document.getElementById(`othello-cell${i}`).classList.remove('empty');
-        } else if (dim1Board[i] === 'white') {
-            document.getElementById(`othello-cell${i}`).classList.add('white');
-            document.getElementById(`othello-cell${i}`).classList.remove('black');
-            document.getElementById(`othello-cell${i}`).classList.remove('empty');
+        const cell = document.getElementById(`othello-cell${i}`);
+        if (flatBoard[i] === 'black') {
+            cell.classList.add('black');
+            cell.classList.remove('white', 'empty');
+        } else if (flatBoard[i] === 'white') {
+            cell.classList.add('white');
+            cell.classList.remove('black', 'empty');
         }
-    }
+    };
+}
+
+// （画面読み込み時の）初期状態の盤面を１次元化して、配列を取得する
+const flatInitialBoard = flattenBoard(initialBoard);
+// 画面読み込み時に盤面を表示する
+displayBoard(flatInitialBoard);
+
+
+// オセロの駒を打ったときにエラーが生じたら、メッセージを表示する
+const responseDiv = document.getElementById('response');
+//クリックして、オセロの駒を打つ処理
+for (let i = 0; i < 64; i++) {
+    document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function (event) {
+        try {
+            const response = await fetch('/match/local/place-piece/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
+                },
+                body: JSON.stringify({ cell: i, pk: matchId })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // 更新された盤面を一次元化する
+                flatUpdatedBoard = flattenBoard(data.board);
+                // 盤面の表示を更新する
+                displayBoard(flatUpdatedBoard);
+                // ターンの表示を更新する
+                displayTurnIndicator(data.turn);
+            }
+            else {
+                responseDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+            }
+        } catch (error) {
+            responseDiv.innerHTML = `<p>Network error: ${error}</p>`;
+        }
+    });
 };
 
 // result = { "blackCount": black_count, "whiteCount": white_count, "winner": winner, }
@@ -141,42 +162,6 @@ if (initialStatus !== "対局中") {
         }
     });
 }
-
-//クリックして、オセロの駒を打つ処理
-for (let i = 0; i < 64; i++) {
-    document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function (event) {
-        event.preventDefault();  // フォームのデフォルト動作を防止
-
-        const cell = i;
-        const responseDiv = document.getElementById('response');
-
-
-        try {
-            const response = await fetch('/match/local/place-piece/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
-                },
-                body: JSON.stringify({ cell: cell, pk: matchId })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                //responseDiv.innerHTML = `<p>${data.message}</p>`;
-                //const board = JSON.parse('{{ data.board|escapejs }}');  // fetch_data から返されたデータの board を使う
-                updateBoard(data.board);
-                displayTurnIndicator(data.turn);
-            }
-            else {
-                responseDiv.innerHTML = `<p>Error: ${data.error}</p>`;
-            }
-        } catch (error) {
-            responseDiv.innerHTML = `<p>Network error: ${error}</p>`;
-        }
-    });
-};
 
 // 終局処理
 document.getElementById('end-game').addEventListener('click', async function (event) {

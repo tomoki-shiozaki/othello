@@ -19,12 +19,10 @@
 <!-- 現在のターン（プレイヤー）を表示する -->
 <div class="turn-indicator"><span id="turn" name="turn"></span>の番</div>
 
-
-<!-- <div class="othello-grid-container"></div> -->
-
-<!--オセロの盤面-->
+<!--オセロの盤面を表示する-->
+<!-- JavaScriptで盤面を動的に表示することもできるのだろうが、実装時にはEmmet記法で書く方法しか思いつかなかった。 -->
+<!-- .othello-grid-item#othello-grid-item$@0*64>.othello-grid-cell#othello-cell$@0 -->
 <div class="othello-grid-container">
-    <!-- .othello-grid-item#othello-grid-item$@0*64>.othello-grid-cell#othello-cell$@0 -->
     <div class="othello-grid-item" id="othello-grid-item0">
         <div class="othello-grid-cell" id="othello-cell0"></div>
     </div>
@@ -218,6 +216,7 @@
         <div class="othello-grid-cell" id="othello-cell63"></div>
     </div>
 </div>
+
 <div id="response"></div>
 <!-- <script>        
         const othello_items = []
