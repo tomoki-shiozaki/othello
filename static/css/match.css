@@ -7,33 +7,35 @@
     font-size: 2rem;
 }
 
+/* オセロの盤面の格子 */
 .othello-grid-container {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    /* 8列の格子 */
-    grid-template-rows: repeat(8, 1fr);
     /* 8行の格子 */
-    width: 400px;
+    grid-template-rows: repeat(8, 1fr);
+    /* 8列の格子 */
+    grid-template-columns: repeat(8, 1fr);    
     /* 格子の幅 */
-    height: 400px;
+    width: 400px;
     /* 格子の高さ */
-    border: 2px solid black;
+    height: 400px;
     /* 格子全体の枠 */
+    border: 2px solid black;
     margin: 0 auto;
 }
 
+/* オセロのマス目 */
 .othello-grid-item {
     display: flex;
-    justify-content: center;
     /*横方向の中央ぞろえ*/
-    align-items: center;
+    justify-content: center;
     /*縦方向の中央ぞろえ*/
+    align-items: center;
     background-color: green;
+    /* マス目の枠線 */
     border: 1px solid #ccc;
-    /* セルの枠線 */
-    /* font-size: 20px; */
 }
 
+/* オセロの黒の駒 */
 .othello-grid-cell.black {
     background-color: black;
     width: 80%;
@@ -41,6 +43,7 @@
     border-radius: 100%;
 }
 
+/* オセロの白の駒 */
 .othello-grid-cell.white {
     background-color: white;
     width: 80%;
@@ -49,26 +52,15 @@
 }
 
 .othello-button-container {
-    display: flex;
     /* ボタンを横並びに */
-    gap: 20px;
+    display: flex;
     /* ボタンの間隔を空ける */
+    gap: 20px;
     justify-content: center;
     margin: 10px auto;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* #pass-turn {
-        display: block;
-        margin: 10px auto;
-    } */
-
-.result-box {
+#result-box {
     text-align: center;
     background-color: #f4f4f4;
     padding: 20px;
@@ -79,13 +71,13 @@ button {
     margin: 20px auto;
 }
 
-.result-box .counts {
+#result-box .counts {
     font-size: 18px;
     margin: 0;
     color: #333;
 }
 
-.result-box .result {
+#result-box .result {
     font-size: 20px;
     font-weight: bold;
     color: #007bff;
@@ -93,7 +85,6 @@ button {
 }
 
 @media (max-width: 600px) {
-
     /* スマートフォン用のスタイル */
     .othello-grid-container {
         width: 92vw;
