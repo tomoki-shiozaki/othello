@@ -56,24 +56,21 @@ document.getElementById('pass-turn').addEventListener('click', async function (e
 
 // オセロの盤面を作る
 // othelloGridContainerはオセロの盤面の枠組み
-document.addEventListener('DOMContentLoaded', () => {
-    const othelloGridContainer = document.querySelector('#othello-grid-container');
-    for (let i = 0; i < 64; i++) {
-        // othelloGridItemはオセロのマス目
-        const othelloGridItem = document.createElement('div');
-        othelloGridItem.classList.add('othello-grid-item');
-        othelloGridItem.id = `othello-grid-item${i}`
-        // othelloGridCellはオセロの駒
-        const othelloGridCell = document.createElement('div');
-        othelloGridCell.classList.add('othello-grid-cell');
-        othelloGridCell.id = `othello-cell${i}`;
-        // othelloGridCellを親要素othelloGridItemに追加する
-        othelloGridItem.appendChild(othelloGridCell);
-        // othelloGridItemを親要素othelloGridContainerに追加する
-        othelloGridContainer.appendChild(othelloGridItem);
-    }
-})
-
+const othelloGridContainer = document.querySelector('.othello-grid-container');
+for (let i = 0; i < 64; i++) {
+    // othelloGridItemはオセロのマス目
+    const othelloGridItem = document.createElement('div');
+    othelloGridItem.classList.add('othello-grid-item');
+    othelloGridItem.id = `othello-grid-item${i}`
+    // othelloGridCellはオセロの駒
+    const othelloGridCell = document.createElement('div');
+    othelloGridCell.classList.add('othello-grid-cell');
+    othelloGridCell.id = `othello-cell${i}`;
+    // 駒othelloGridCellをマス目othelloGridItemに追加する
+    othelloGridItem.appendChild(othelloGridCell);
+    // マス目othelloGridItemを盤面othelloGridContainerに追加する
+    othelloGridContainer.appendChild(othelloGridItem);
+}
 
 //モデルでは、オセロの盤面を表すboard---各セルをblack, white, emptyで管理する---は2次元配列
 //一方、オセロの盤面をフロントエンド側で1次元配列で表した
