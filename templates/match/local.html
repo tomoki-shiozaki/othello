@@ -218,36 +218,10 @@
 </div>
 
 <div id="response"></div>
-<!-- <script>        
-        const othello_items = []
-        for(let i = 0; i < 64; i++){
-            othello_items[i] = document.getElementById(`othello-item${i}`)
-        }
-        for(let i = 0; i < 64; i++){
-            othello_items[i].addEventListener('click', ()=>{
-                //適当な処理を書く
-                console.log(i)
-            })
-        }
-        const othello_cells = []
-        for(let i = 0; i<64; i++){
-            othello_cells[i] = document.getElementById(`othello-cell${i}`)
-        }
-        for(let i=0; i < 64; i++){
-            if(boardList[i] == 'black'){
-                othello_cells[i].classList.remove('white')
-                othello_cells[i].classList.add('black')
-            }else if(boardList[i] == 'white'){
-                othello_cells[i].classList.remove('black')
-                othello_cells[i].classList.add('white')
-            }
-        }
-    </script> -->
+
 <div class="othello-button-container">
     <button type="button" class="btn btn-secondary btn-lg" id="pass-turn">パス</button>
     <button type="button" class="btn btn-secondary btn-lg" id="end-game">終局</button>
-</div>
-<div class="game-result">
 </div>
 
 <div id="game-result" class="result-box">

@@ -121,7 +121,12 @@ for (let i = 0; i < 64; i++) {
     });
 };
 
-// result = { "blackCount": black_count, "whiteCount": white_count, "winner": winner, }
+
+
+// --- ゲーム結果管理: 終局処理とゲーム結果表示 ---
+
+// ゲーム結果を表示する関数
+// 引数は辞書で、result = { "blackCount": black_count, "whiteCount": white_count, "winner": winner, }
 const displayGameResult = (result) => {
     const countResult = document.querySelector("#game-result .counts");
     const gameResult = document.querySelector("#game-result .result");
@@ -135,64 +140,39 @@ const displayGameResult = (result) => {
     }
 };
 
-// ページ読み込み時に、対局が終了していたら、結果を表示する
-if (initialStatus !== "対局中") {
-    window.addEventListener("DOMContentLoaded", async function (event) {
-        event.preventDefault();  // フォームのデフォルト動作を防止
-        try {
-            const response = await fetch('/match/end-game/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
-                },
-                body: JSON.stringify({ pk: matchId })
-            });
+// ゲーム結果を取得し、取得した結果を表示する非同期関数
+const fetchGameResult = async () => {
+    try {
+        const response = await fetch('/match/end-game/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
+            },
+            body: JSON.stringify({ pk: matchId })
+        });
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (response.ok) {
-                displayGameResult(data);
-                console.log(data);
-            } else {
-                console.log(`Error: ${data.error}`);
-            }
-        } catch (error) {
-            console.log(`Network error: ${error}`);
+        if (response.ok) {
+            displayGameResult(data);
+        } else {
+            console.log(`Error: ${data.error}`);
         }
-    });
+    } catch (error) {
+        console.log(`Network error: ${error}`);
+    }
+};
+
+// ページ読み込み時に対局が終了していたら、結果を表示する
+if (initialStatus !== "対局中") {
+    window.addEventListener("DOMContentLoaded", fetchGameResult);
 }
 
-// 終局処理
-document.getElementById('end-game').addEventListener('click', async function (event) {
-    event.preventDefault();  // フォームのデフォルト動作を防止
+// 終局ボタンを押したら、終局処理を行う
+document.getElementById('end-game').addEventListener('click', async function () {
     const answer = confirm("本当にゲームを終了しますか？OKとすると、黒白それぞれの枚数を数えて、勝敗を決定します。");
     if (answer) {
-        try {
-            const response = await fetch('/match/end-game/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
-                },
-                body: JSON.stringify({ pk: matchId })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                displayGameResult(data);
-                console.log(data);
-            } else {
-                console.log(`Error: ${data.error}`);
-            }
-        } catch (error) {
-            console.log(`Network error: ${error}`);
-        }
+        fetchGameResult()
     }
 });
-
-
-
-
-console.log(typeof csrfToken)
