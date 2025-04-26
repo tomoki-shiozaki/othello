@@ -17,4 +17,5 @@ class CustomUser(AbstractUser):
         max_length=15,
         choices=LEVEL_CHOICES,
         default=BEGINNER,  # デフォルトは「初心者」
+        verbose_name="レベル",
     )

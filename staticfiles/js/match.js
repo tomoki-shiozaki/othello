@@ -146,8 +146,8 @@ for (let i = 0; i < 64; i++) {
 // ゲーム結果を表示する関数
 // 引数は辞書で、result = { "blackCount": black_count, "whiteCount": white_count, "winner": winner, }
 const displayGameResult = (result) => {
-    const countResult = document.querySelector("#game-result .counts");
-    const gameResult = document.querySelector("#game-result .result");
+    const countResult = document.querySelector("#result-box .counts");
+    const gameResult = document.querySelector("#result-box .result");
     countResult.innerHTML = `黒${result["blackCount"]}枚、白${result["whiteCount"]}枚。`
     if (result["winner"] === "black") {
         gameResult.innerHTML = `黒の勝ちです。`
