@@ -87,9 +87,13 @@ class AuthenticatedLocalMatchPlacePieceView(View):
             # ゲームのロジック処理を行う
             # Ruleクラスはゲームのルールを記述したクラス
             rule = Rule(board, cell, turn)
-            # can_place_piece()メソッドは、駒をおけるときにTrue
-            if rule.can_place_piece():
-                rule.place_piece()  # 駒を打って、盤面を書き換える
+            # 駒を置けるかどうかの結果を取得する
+            placement_result = rule.find_reversable_pieces()
+            can_place_piece = placement_result["can_place_piece"]
+            reversable_pieces = placement_result["reversable_pieces"]
+            # 駒をおける場合、駒を置いて、相手の駒をひっくり返し、ターンを進める
+            if can_place_piece:
+                rule.place_and_reverse_pieces(reversable_pieces)
                 rule.change_turn()
 
                 # ゲームの盤面とターンを変更
