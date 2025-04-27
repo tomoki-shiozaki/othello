@@ -26,7 +26,7 @@
         <a href="{% url 'local_match_play' pk=match.pk %}">対局画面へ</a> | <a href="{% url 'local_match_delete' pk=match.pk %}">削除</a>
     </div>
 </div>
-<br />
+<br>
 {% empty %}
 <p>ゲーム履歴はありません</p>
 {% endfor %}

@@ -5,6 +5,7 @@ from django.urls import reverse
 
 
 # Create your models here.
+# オセロのゲームモデル
 # 盤面の初期状態を定義
 def default_settings():
     initial_board = []
@@ -25,11 +26,16 @@ class AuthenticatedLocalMatch(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    black_player = models.CharField(max_length=255)
-    white_player = models.CharField(max_length=255)
-    turn = models.CharField(
-        max_length=15, default="black's turn"
-    )  #'black's turn', 'white's turn'
+    black_player = models.CharField(
+        max_length=255,
+        verbose_name="黒のプレイヤー",
+    )
+    white_player = models.CharField(
+        max_length=255,
+        verbose_name="白のプレイヤー",
+    )
+    #'black's turn', 'white's turn'の２つを設定
+    turn = models.CharField(max_length=15, default="black's turn")
     board = models.JSONField(default=default_settings)
     result = models.CharField(max_length=15, default="対局中")
 

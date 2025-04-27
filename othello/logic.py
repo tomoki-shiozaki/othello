@@ -1,3 +1,6 @@
+from itertools import product
+
+
 class Rule:
     def __init__(self, board, cell, turn):
         self.board = board
@@ -19,124 +22,101 @@ class Rule:
         self.extended_cell_row = self.cell_row + 1
         self.extended_cell_column = self.cell_column + 1
 
-    def can_place_piece(self):
+    # 周囲の８つの方向に対して、駒を置くことができるか確認する
+    # dx, dyは1, -1 ,0のいずれか（(x, y)=(0, 0)を除く）
+    def find_reversable_pieces_in_each_direction(self, dy, dx):
         can_place_piece = False
-        # 黒の手番。当該cellの周囲の８方向に駒を置けるかを確認する。
-        if (
-            self.turn == "black's turn"
-            and self.board[self.cell_row][self.cell_column] == "empty"
-        ):
-            for dy in [-1, 0, 1]:
-                for dx in [-1, 0, 1]:
-                    if not (dy == 0 and dx == 0):
-                        y = self.extended_cell_row + dy
-                        x = self.extended_cell_column + dx
-                        if not (1 <= y < 9 and 1 <= x < 9):
-                            continue
-                        if self.extended_board[y][x] == "white":
-                            y += dy
-                            x += dx
-                            while 1 <= y < 9 and 1 <= x < 9:
-                                if self.extended_board[y][x] == "white":
-                                    y += dy
-                                    x += dx
-                                if self.extended_board[y][x] == "empty":
-                                    break
-                                if self.extended_board[y][x] == "black":
-                                    can_place_piece = True
-                                    break
-            return can_place_piece
+        reversable_pieces = []
+        reversed_pieces = 0  # ひっくり返す（可能性のある）駒の枚数を数える
+        # 結果を返すための変数（初期状態）
+        result = {
+            "can_place_piece": can_place_piece,
+            "reversable_pieces": reversable_pieces,
+        }
 
-        # 白の手番。当該cellの周囲の８方向に駒を置けるかを確認する。
-        if (
-            self.turn == "white's turn"
-            and self.board[self.cell_row][self.cell_column] == "empty"
-        ):
-            for dy in [-1, 0, 1]:
-                for dx in [-1, 0, 1]:
-                    if not (dy == 0 and dx == 0):
-                        y = self.extended_cell_row + dy
-                        x = self.extended_cell_column + dx
-                        if not (1 <= y < 9 and 1 <= x < 9):
-                            continue
-                        if self.extended_board[y][x] == "black":
-                            y += dy
-                            x += dx
-                            while 1 <= y < 9 and 1 <= x < 9:
-                                if self.extended_board[y][x] == "black":
-                                    y += dy
-                                    x += dx
-                                if self.extended_board[y][x] == "empty":
-                                    break
-                                if self.extended_board[y][x] == "white":
-                                    can_place_piece = True
-                                    break
-            return can_place_piece
-
-    def place_piece(self):
-        # 黒の手番
+        # ターンに応じた色の設定
         if self.turn == "black's turn":
-            # 打ったセルを黒にする
-            self.board[self.cell_row][self.cell_column] = "black"
-            # 以下、黒にひっくり返す処理
-            for dy in [-1, 0, 1]:
-                for dx in [-1, 0, 1]:
-                    if not (dy == 0 and dx == 0):
-                        y = self.extended_cell_row + dy
-                        x = self.extended_cell_column + dx
-                        n = 0  # ひっくり返す駒枚数を各方向ごとに数える
-                        if not (1 <= y < 9 and 1 <= x < 9):
-                            continue
-                        if self.extended_board[y][x] == "white":
-                            y += dy
-                            x += dx
-                            n += 1
-                            while 1 <= y < 9 and 1 <= x < 9:
-                                if self.extended_board[y][x] == "white":
-                                    y += dy
-                                    x += dx
-                                    n += 1
-                                if self.extended_board[y][x] == "empty":
-                                    break
-                                if self.extended_board[y][x] == "black":
-                                    # 駒(n枚)をひっくり返す
-                                    for r in range(1, n + 1):
-                                        self.board[self.cell_row + r * dy][
-                                            self.cell_column + r * dx
-                                        ] = "black"
-                                    break
+            placed_piece_color = "black"
+            reversed_piece_color = "white"
+        elif self.turn == "white's turn":
+            placed_piece_color = "white"
+            reversed_piece_color = "black"
 
-        # 白の手番。
-        if self.turn == "white's turn":
-            # 打ったセルを白にする
-            self.board[self.cell_row][self.cell_column] = "white"
-            # 以下、白にひっくり返す処理
-            for dy in [-1, 0, 1]:
-                for dx in [-1, 0, 1]:
-                    if not (dy == 0 and dx == 0):
-                        y = self.extended_cell_row + dy
-                        x = self.extended_cell_column + dx
-                        n = 0  # ひっくり返す駒枚数を各方向ごとに数える
-                        if not (1 <= y < 9 and 1 <= x < 9):
-                            continue
-                        if self.extended_board[y][x] == "black":
-                            y += dy
-                            x += dx
-                            n += 1
-                            while 1 <= y < 9 and 1 <= x < 9:
-                                if self.extended_board[y][x] == "black":
-                                    y += dy
-                                    x += dx
-                                    n += 1
-                                if self.extended_board[y][x] == "empty":
-                                    break
-                                if self.extended_board[y][x] == "white":
-                                    # 駒(n枚)をひっくり返す
-                                    for r in range(1, n + 1):
-                                        self.board[self.cell_row + r * dy][
-                                            self.cell_column + r * dx
-                                        ] = "white"
-                                    break
+        # 駒を置いた場所に既に駒がおかれている場合は処理を終了する。
+        if self.board[self.cell_row][self.cell_column] != "empty":
+            return result
+
+        # 以下、dy, dxの方向に駒がおけるかを確認する
+        y = self.extended_cell_row + dy
+        x = self.extended_cell_column + dx
+
+        # 盤面の範囲外の場合は処理を終了する
+        if not (1 <= y < 9 and 1 <= x < 9):
+            return result
+
+        # ひっくり返せる駒がある場合
+        if self.extended_board[y][x] == reversed_piece_color:
+            y += dy
+            x += dx
+            reversed_pieces += 1
+
+            # はさめる駒を探す
+            while 1 <= y < 9 and 1 <= x < 9:
+                # はさめる駒をさらに探す
+                if self.extended_board[y][x] == reversed_piece_color:
+                    y += dy
+                    x += dx
+                    reversed_pieces += 1
+                # 駒がなく、はさむことができない。処理を終了する
+                if self.extended_board[y][x] == "empty":
+                    return result
+                # はさむことのできる駒を発見
+                if self.extended_board[y][x] == placed_piece_color:
+                    # 駒を置くことができる
+                    result["can_place_piece"] = True
+                    # ひっくり返せる駒の位置を追加
+                    for r in range(1, reversed_pieces + 1):
+                        result["reversable_pieces"].append(
+                            {
+                                "y": self.cell_row + r * dy,
+                                "x": self.cell_column + r * dx,
+                            }
+                        )
+                    return result
+        return result
+
+    def find_reversable_pieces(self):
+        can_place_piece = False
+        reversable_pieces = []
+        # 結果を返すための変数（初期化してある）
+        result = {
+            "can_place_piece": can_place_piece,
+            "reversable_pieces": reversable_pieces,
+        }
+        for dy, dx in product([-1, 0, 1], repeat=2):
+            if not (dy == 0 and dx == 0):
+                result_in_each_direction = (
+                    self.find_reversable_pieces_in_each_direction(dy, dx)
+                )
+                if result_in_each_direction["can_place_piece"]:
+                    result["can_place_piece"] = True
+                    result["reversable_pieces"] += result_in_each_direction[
+                        "reversable_pieces"
+                    ]
+        return result
+
+    def place_and_reverse_pieces(self, reversable_pieces):
+        # ターンに応じた色の設定
+        if self.turn == "black's turn":
+            placed_piece_color = "black"
+        elif self.turn == "white's turn":
+            placed_piece_color = "white"
+
+        # 駒を置く
+        self.board[self.cell_row][self.cell_column] = placed_piece_color
+        # 駒を裏返す
+        for cell_position in reversable_pieces:
+            self.board[cell_position["y"]][cell_position["x"]] = placed_piece_color
 
     def change_turn(self):
         # 黒の手番の時は、白の手番に変更する
