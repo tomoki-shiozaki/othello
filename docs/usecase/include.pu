@@ -1,0 +1,9 @@
+@startuml include
+actor User
+
+User --> (AI対戦を始める)
+User --> (フレンド対戦を始める)
+
+(AI対戦を始める) ..> (ゲームルームを作成) : <<include>>
+(フレンド対戦を始める) ..> (ゲームルームを作成) : <<include>>
+@enduml

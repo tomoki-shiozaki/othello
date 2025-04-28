@@ -1,0 +1,6 @@
+@startuml common_actors
+' 共通のアクター定義
+actor ログインユーザー as loggedInUser
+actor 未ログインユーザー as unloggedUser
+actor 未登録ユーザー as guest
+@enduml

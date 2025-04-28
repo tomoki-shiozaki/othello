@@ -1,0 +1,10 @@
+@startuml account_usecase
+skinparam defaultFontName "Noto Sans CJK JP"
+
+!include game_management_usecase.pu
+!include gameplay_usecase.pu
+!include account_usecase.pu
+
+
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml game_management_usecase
+skinparam defaultFontName "Noto Sans CJK JP"
+
+!include common_actors.pu
+
+rectangle "オセロアプリ" {
+  package "ゲーム管理" {
+    (新規ゲーム作成)
+    (ローカル対戦)
+    (対局履歴リスト閲覧)
+    (対局削除)
+    (リモート対戦#検討中)
+    (CPU対戦#検討中)
+    (ローカル対戦#検討中)
+}
+}
+
+loggedInUser --> (新規ゲーム作成)
+loggedInUser --> (ローカル対戦)
+loggedInUser --> (対局履歴リスト閲覧)
+loggedInUser --> (対局削除)
+loggedInUser --> (リモート対戦#検討中)
+unloggedUser --> (ローカル対戦#検討中)
+guest --> (ローカル対戦#検討中)
+
+' ここで注釈を追加
+note bottom of (リモート対戦#検討中)
+  この機能は現在実装を検討中です。
+end note
+note bottom of (ローカル対戦#検討中)
+  この機能は現在実装を検討中です。
+end note
+note bottom of (CPU対戦#検討中)
+  この機能は現在実装を検討中です。
+end note
+
+@enduml
