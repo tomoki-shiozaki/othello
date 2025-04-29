@@ -133,28 +133,32 @@
 ![ER図](er/er_diagram/er.svg)
 
 ### 4.2 テーブル定義
-
+- 外部キー、ユニーク、DEFAULTは概要欄に記載する
 #### ユーザーアカウント テーブル
 
 | カラム名     | 型           | 主キー | NotNull | 概要                             |
 |--------------|--------------|--------|---------|----------------------------------|
-| `user_id`    | `INT`        | ○      | ○       | ユーザーを一意に識別するID       |
-| `email`      | `VARCHAR(255)`|        | ○       | ユーザーのメールアドレス（ユニーク制約） |
-| `user_name`  | `VARCHAR(255)`|        | ○       | ユーザーネーム（ユニーク制約）|
-| `password`   | `VARCHAR(255)`|        | ○       | ハッシュ化されたパスワード       |
+| `id` | `BigAutoField`| ○      | ○       | ユーザーを一意に識別するID       |
+| `username`  | `CharField`|        | ○       | ユーザーネーム（ユニーク制約）|
+| `email`      | `EmailField`|        | ○       | ユーザーのメールアドレス（ユニーク制約なし） |
+| `password`   | `CharField`|        | ○       | ハッシュ化されたパスワード       |
+| `level` | `CharField` |  | ○ | ユーザーのレベル（選択式）。BEGINNER, INTERMEDIATE, ADVANCED の3段階から選択。default="beginner" |
 
 
-#### ゲーム テーブル
+#### ログインユーザーのローカル対戦 テーブル
 
 | カラム名     | 型             | 主キー | NotNull | 概要                           |
 |--------------|----------------|--------|---------|--------------------------------|
-| `game_id`    | `INT`          | ○      | ○       | ゲームを一意に識別するID       |
-| `player1_id` | `INT`          |        | ○       | プレイヤー1のユーザーID（外部キー） |
-| `player2_id` | `INT`          |        | ○       | プレイヤー2のユーザーID（外部キー） |
-| `turn`       | `VARCHAR(255)` |        | ○       | 現在の手番を表す（プレイヤーID等） |
-| `board`      | `JSON`         |        | ○       | 現在の盤面の状態（JSON形式）    |
+| `id`    | `BigAutoField`          | ○      | ○       | ゲームを一意に識別するID       |
+| `authenticated_user` | `ForeignKey(id)` |  | ○ | ユーザーアカウントの主キーを参照 | 
+| `created_at` | `DateTimeField`|        | ○       | ゲームの作成時刻 |
+| `updated_at` | `DateTimeField`|        | ○       | ゲームの最終着手時刻 |
+| `black_player`| `CharField` |        | ○       | 黒のプレイヤー名 |
+| `white_player`| `CharField` |        | ○       | 白のプレイヤー名 |
+| `turn`  | `CharField` |    |   ○   | 現在のターン。default="black's turn"  |
+| `board`      | `JSONField`         |        | ○       | 現在の盤面の状態（JSON形式）。defaultとして、盤面の初期状態を定義。    |
+| `result` | `CharField` |  | ○ | 対局のステータス。default="対局中" | 
 
-詳細は[DB設計書](DB_design/DB_design.md)をご覧ください。
 
 ---
 

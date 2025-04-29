@@ -1,0 +1,15 @@
+@startuml example2
+entity "ユーザー" as user {
+  *ユーザーID: INT <<PK>>
+  名前: VARCHAR(100)
+}
+
+entity "注文" as order {
+  *注文ID: INT <<PK>>
+  ユーザーID: INT <<FK>>
+  商品名: VARCHAR[100]
+  料金
+}
+
+user ||--o{ order : "ユーザーID → ユーザー.ユーザーID"
+@enduml
