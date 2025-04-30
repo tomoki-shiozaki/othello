@@ -1,0 +1,21 @@
+@startuml system_architecture
+skinparam defaultFontName "Noto Sans CJK JP"
+left to right direction
+
+skinparam rectangle {
+  BackgroundColor #EAEAEA
+  BorderColor Black
+}
+
+actor ユーザー as user
+
+rectangle "Render (Webサーバー)" {
+    component "オセロアプリ(Django)" as django
+}
+
+rectangle "Neon (PostgreSQL)" as db
+
+user --> django : HTTPリクエスト
+django --> db : Django ORMアクセス
+
+@enduml

@@ -56,3 +56,5 @@
 
 ## デプロイ
 - RenderとNeonでデプロイしています。URLは[こちら](https://othello-d46f.onrender.com/)です。
+- システム構成図は以下の通りです。詳細は[開発ドキュメント](docs/README.md)をご覧ください。
+  ### ![こちら](docs/system_architecture/system_architecture/system_architecture.svg)
