@@ -1,0 +1,21 @@
+@startuml account_usecase
+skinparam defaultFontName "Noto Sans CJK JP"
+
+!include common_actors.pu
+
+rectangle "オセロアプリ" {
+  package "アカウント機能" {
+  (ユーザー登録)
+  (ログイン)
+  (ログアウト)
+  (パスワード変更)
+}
+}
+
+
+guest --> (ユーザー登録)
+unloggedUser --> (ログイン)
+loggedInUser --> (ログアウト)
+loggedInUser --> (パスワード変更)
+
+@enduml

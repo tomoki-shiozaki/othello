@@ -1,0 +1,7 @@
+@startuml extend
+actor User
+
+User --> (ゲームをプレイする)
+
+(ゲームをプレイする) ..> (リザルト画面を表示) : <<extend>>\n[勝敗が決まったとき]
+@enduml

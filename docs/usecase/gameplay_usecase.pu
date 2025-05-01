@@ -1,0 +1,18 @@
+@startuml gameplay_usecase
+skinparam defaultFontName "Noto Sans CJK JP"
+
+actor ログインユーザー as loggedInUser
+
+rectangle "オセロアプリ" {
+    package "ゲーム画面" {
+    (駒を打つ)
+    (パスする)
+    (終局処理をする)
+}
+}
+
+
+loggedInUser --> (駒を打つ)
+loggedInUser --> (パスする)
+loggedInUser --> (終局処理をする)
+@enduml
