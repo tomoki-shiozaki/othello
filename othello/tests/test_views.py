@@ -200,7 +200,7 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
             black_player="Alice",
             white_player="Bob",
         )
-        self.url = reverse("place-piece")
+        self.url = reverse("place-piece", args=[self.match.pk])
 
     @patch("othello.views.Rule")  # Rule をモックする
     def test_place_piece_successfully(self, MockRule):
@@ -214,10 +214,7 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
         mock_rule_instance.turn = "white's turn"
 
         # POSTリクエスト
-        data = {
-            "cell": [2, 4],
-            "pk": self.match.pk,
-        }
+        data = {"cell": [2, 4]}
         response = self.client.post(
             self.url,
             data=json.dumps(data),

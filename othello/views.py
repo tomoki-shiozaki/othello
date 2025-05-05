@@ -71,16 +71,16 @@ class AuthenticatedLocalMatchPlayView(
         )
 
 
-class AuthenticatedLocalMatchPlacePieceView(View):
-    def post(self, request):
+class AuthenticatedLocalMatchPlacePieceView(
+    LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, View
+):
+    def post(self, request, pk):
         try:
             # リクエストボディをJSONとしてパース
             body = json.loads(request.body)
             cell = body.get("cell")
-            pk = body.get("pk")
-            game = AuthenticatedLocalMatch.objects.get(
-                pk=pk, authenticated_user=self.request.user
-            )
+
+            game = self.get_object()
             board = game.board
             turn = game.turn
 
@@ -115,51 +115,30 @@ class AuthenticatedLocalMatchPlacePieceView(View):
             return JsonResponse({"error": "Invalid JSON"}, status=400)
 
 
-def pass_turn(request):
-    if request.method == "POST":
-        try:
-            body = json.loads(request.body)
-            pk = body.get("pk")
-            game = AuthenticatedLocalMatch.objects.get(
-                pk=pk, authenticated_user=request.user
-            )
-            if game.turn == "black's turn":
-                game.turn = "white's turn"
-            else:
-                game.turn = "black's turn"
+class PassTurnView(LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, View):
+    def post(self, request, pk):
+        game = self.get_object()  # mixinでチェック済み
 
-            # 変更を保存
-            game.save()
+        # ターン切り替え
+        game.turn = "white's turn" if game.turn == "black's turn" else "black's turn"
+        game.save()
 
-            # レスポンスデータの作成
-            response_data = {
+        return JsonResponse(
+            {
                 "message": "Player passed.",
                 "turn": game.turn,
             }
-
-            return JsonResponse(response_data)
-
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-    return JsonResponse({"error": "Invalid request method"}, status=400)
+        )
 
 
-def end_game_view(request):
-    if request.method == "POST":
-        try:
-            body = json.loads(request.body)
-            pk = body.get("pk")
-            game = AuthenticatedLocalMatch.objects.get(
-                pk=pk, authenticated_user=request.user
-            )
-            results = end_game(game.board)
-            # 対局結果をデータベースに格納する
-            game.result = results["winner"]
-            # 変更を保存
-            game.save()
+class EndGameView(LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, View):
+    def post(self, request, pk):
+        game = self.get_object()  # mixinでチェック済み
 
-            return JsonResponse(results)
+        results = end_game(game.board)
+        # 対局結果をデータベースに格納する
+        game.result = results["winner"]
+        # 変更を保存
+        game.save()
 
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-    return JsonResponse({"error": "Invalid request method"}, status=400)
+        return JsonResponse(results)
