@@ -85,20 +85,21 @@ class TestAuthenticatedLocalMatchAccessControl(
 
         self.login_required_urls = [
             reverse("local_match_list"),
-            reverse("local_match_play", args=[self.match.pk]),
+            reverse("local_match_new"),
             reverse("local_match_delete", args=[self.match.pk]),
+            reverse("local_match_play", args=[self.match.pk]),
         ]
 
         self.permission_protected_urls = [
             (
-                lambda client, **kwargs: client.get(
-                    reverse("local_match_play", args=[kwargs["pk"]])
+                lambda client, **kwargs: client.post(
+                    reverse("local_match_delete", args=[kwargs["pk"]])
                 ),
                 {"pk": self.match.pk},
             ),
             (
-                lambda client, **kwargs: client.post(
-                    reverse("local_match_delete", args=[kwargs["pk"]])
+                lambda client, **kwargs: client.get(
+                    reverse("local_match_play", args=[kwargs["pk"]])
                 ),
                 {"pk": self.match.pk},
             ),

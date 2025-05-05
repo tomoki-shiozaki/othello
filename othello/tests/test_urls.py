@@ -31,12 +31,17 @@ class TestAuthenticatedLocalMatchAccess(TestOwnerLoginMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Aliceさん")
 
-    def test_owner_can_access_play_view(self):
-        response = self.client.get(reverse("local_match_play", args=[self.match.pk]))
+    def test_owner_can_access_new_view(self):
+        response = self.client.get(reverse("local_match_new"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Alice")
+        self.assertContains(response, "新しい対局")
 
     def test_owner_can_access_delete_view(self):
         response = self.client.get(reverse("local_match_delete", args=[self.match.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "削除")
+
+    def test_owner_can_access_play_view(self):
+        response = self.client.get(reverse("local_match_play", args=[self.match.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Alice")
