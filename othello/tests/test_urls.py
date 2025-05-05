@@ -1,32 +1,42 @@
+# このファイルは、URLの解決およびビューの正常なアクセス（所有者によるアクセス）を確認するためのテストを集めています。
+# アクセス制御（未ログイン・他人アクセス）は test_permissions.py を参照。
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from othello.models import AuthenticatedLocalMatch
 
-class AuthenticatedLocalMatchListUrlTest(TestCase):
-    def test_url_resolves_to_view(self):
-        self.user = get_user_model().objects.create_user(
-            username="testuser", password="testpassword"
+
+class TestOwnerLoginMixin:
+    def login_user(self, username="testuser", password="testpassword"):
+        user = get_user_model().objects.create_user(
+            username=username, password=password
         )
-        # ログイン処理
-        self.client.login(username="testuser", password="testpassword")
+        self.client.login(username=username, password=password)
+        return user
 
-        response = self.client.get("/match/local/")
-        self.assertEqual(response.status_code, 200)
 
-    def test_url_resolves_to_view_by_name(self):
-        self.user = get_user_model().objects.create_user(
-            username="testuser", password="testpassword"
+class TestAuthenticatedLocalMatchAccess(TestOwnerLoginMixin, TestCase):
+    def setUp(self):
+        self.user = self.login_user()
+        self.match = AuthenticatedLocalMatch.objects.create(
+            authenticated_user=self.user,
+            black_player="Alice",
+            white_player="Bob",
         )
-        # ログイン処理
-        self.client.login(username="testuser", password="testpassword")
 
+    def test_list_url_access(self):
         response = self.client.get(reverse("local_match_list"))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Aliceさん")
 
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse("local_match_list"))
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(
-            response, f"/accounts/login/?next={reverse('local_match_list')}"
-        )
+    def test_owner_can_access_play_view(self):
+        response = self.client.get(reverse("local_match_play", args=[self.match.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Alice")
+
+    def test_owner_can_access_delete_view(self):
+        response = self.client.get(reverse("local_match_delete", args=[self.match.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "削除")

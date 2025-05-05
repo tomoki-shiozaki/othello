@@ -89,14 +89,6 @@ class AuthenticatedLocalMatchListViewTest(TestCase):
         # 他のユーザーのゲームが表示されていないことを確認
         self.assertNotIn(self.match3, response.context_data["object_list"])
 
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse("local_match_list"))
-
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(
-            response, f"/accounts/login/?next={reverse('local_match_list')}"
-        )
-
     def test_view_uses_correct_template(self):
         """ビューが正しいテンプレートを使っているか確認"""
         self.client.login(username="testuser", password="testpassword")
