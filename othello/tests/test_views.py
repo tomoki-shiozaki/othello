@@ -309,3 +309,86 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
 
         # ロギングを有効化
         logging.disable(logging.NOTSET)
+
+
+class PassTurnViewViewTest(TestOwnerLoginMixin, TestCase):
+    def setUp(self):
+        self.user = self.login_user()
+        self.match = AuthenticatedLocalMatch.objects.create(
+            authenticated_user=self.user,
+            black_player="Alice",
+            white_player="Bob",
+        )
+        self.url = reverse("pass_turn", args=[self.match.pk])
+
+    def test_pass_turn_black_to_white(self):
+        response = self.client.post(self.url)
+        self.match.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.match.turn, "white's turn")
+        self.assertEqual(response.json()["message"], "Player passed.")
+        self.assertEqual(response.json()["turn"], "white's turn")
+
+    def test_pass_turn_white_to_black(self):
+        self.match.turn = "white's turn"
+        self.match.save()
+        response = self.client.post(self.url)
+        self.match.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.match.turn, "black's turn")
+        self.assertEqual(response.json()["message"], "Player passed.")
+        self.assertEqual(response.json()["turn"], "black's turn")
+
+
+class EndGameViewViewTest(TestOwnerLoginMixin, TestCase):
+    def setUp(self):
+        self.user = self.login_user()
+        self.match = AuthenticatedLocalMatch.objects.create(
+            authenticated_user=self.user,
+            black_player="Alice",
+            white_player="Bob",
+        )
+        self.url = reverse("end_game", args=[self.match.pk])
+
+    @patch("othello.views.end_game")
+    def test_end_game_black_wins(self, mock_end_game):
+        # モックの設定
+        mock_end_game.return_value = {
+            "blackCount": 40,
+            "whiteCount": 24,
+            "winner": "black",
+        }
+
+        response = self.client.post(self.url)
+        self.match.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.match.result, "black")
+        self.assertEqual(response.json()["blackCount"], 40)
+        self.assertEqual(response.json()["whiteCount"], 24)
+        self.assertEqual(response.json()["winner"], "black")
+        # end_game関数が正しい引数で呼ばれたことを確認
+        mock_end_game.assert_called_once_with(self.match.board)
+
+    @patch("othello.views.end_game")
+    def test_end_game_draw(self, mock_end_game):
+        mock_end_game.return_value = {
+            "blackCount": 32,
+            "whiteCount": 32,
+            "winner": "draw",
+        }
+
+        # ボードをセット（例えば、駒の数が同じ場合など）
+        self.match.board = [["black"] * 4 + ["white"] * 4] * 8  # 偽のボードデータ
+        self.match.save()
+
+        response = self.client.post(self.url)
+        self.match.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.match.result, "draw")
+        self.assertEqual(response.json()["blackCount"], 32)
+        self.assertEqual(response.json()["whiteCount"], 32)
+        self.assertEqual(response.json()["winner"], "draw")
