@@ -1,5 +1,5 @@
 import json
-
+import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views import View
@@ -8,6 +8,7 @@ from django.views.generic.edit import DeleteView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 
 from .models import AuthenticatedLocalMatch
 from .logic import Rule, end_game
@@ -71,6 +72,9 @@ class AuthenticatedLocalMatchPlayView(
         )
 
 
+logger = logging.getLogger(__name__)
+
+
 class AuthenticatedLocalMatchPlacePieceView(
     LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, View
 ):
@@ -79,6 +83,9 @@ class AuthenticatedLocalMatchPlacePieceView(
             # リクエストボディをJSONとしてパース
             body = json.loads(request.body)
             cell = body.get("cell")
+            # 0〜63 の整数かどうかを検証
+            if not isinstance(cell, int) or not (0 <= cell <= 63):
+                return JsonResponse({"error": "Invalid cell value"}, status=400)
 
             game = self.get_object()
             board = game.board
@@ -113,6 +120,15 @@ class AuthenticatedLocalMatchPlacePieceView(
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
+        except PermissionDenied:
+            return JsonResponse({"error": "Permission denied"}, status=403)
+        except Http404:
+            return JsonResponse({"error": "Not found"}, status=404)
+        except Exception as e:
+            logger.exception(
+                f"Unexpected error in AuthenticatedLocalMatchPlacePieceView: {str(e)}"
+            )
+            return JsonResponse({"error": "Internal server error"}, status=500)
 
 
 class PassTurnView(LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, View):

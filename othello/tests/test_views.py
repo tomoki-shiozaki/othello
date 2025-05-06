@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 import json
 from unittest.mock import patch
+import logging
 
 from othello.models import AuthenticatedLocalMatch
 from othello.views import AuthenticatedLocalMatchListView
@@ -214,7 +215,7 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
         mock_rule_instance.turn = "white's turn"
 
         # POSTリクエスト
-        data = {"cell": [2, 4]}
+        data = {"cell": 20}
         response = self.client.post(
             self.url,
             data=json.dumps(data),
@@ -229,15 +230,59 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
         self.assertEqual(json_data["turn"], "white's turn")
         mock_rule_instance.place_and_reverse_pieces.assert_called_once()
 
-    # def test_place_piece_invalid_cell(self):
-    #     # 無効なセル（例えば、盤面外の座標など）を送信
-    #     response = self.client.post(
-    #         self.url,
-    #         data=json.dumps({"cell": 100}),  # 盤面外
-    #         content_type="application/json",
-    #     )
-    #     self.assertEqual(response.status_code, 400)
-    #     self.assertIn("error", response.json())
+    # 駒が置けない場合
+    @patch("othello.views.Rule")
+    def test_place_piece_not_allowed(self, MockRule):
+        mock_rule_instance = MockRule.return_value
+        mock_rule_instance.find_reversable_pieces.return_value = {
+            "can_place_piece": False,
+            "reversable_pieces": [],
+        }
+
+        mock_rule_instance.board = [["dummy"] * 8 for _ in range(8)]
+        mock_rule_instance.turn = "black's turn"
+
+        data = {"cell": 28}
+        response = self.client.post(
+            self.url,
+            data=json.dumps(data),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        json_data = response.json()
+        self.assertEqual(json_data["turn"], "black's turn")  # ターンが変わらない
+        self.assertEqual(json_data["board"][0][0], "empty")
+        mock_rule_instance.place_and_reverse_pieces.assert_not_called()
+
+    def test_place_piece_invalid_cell(self):
+        # 無効なセル（例えば、盤面外の座標など）を送信
+        response = self.client.post(
+            self.url,
+            data=json.dumps({"cell": 64}),  # 盤面外
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("error", response.json())
+
+    def test_place_piece_cell_not_integer(self):
+        # 無効なセル（セルが整数でない）を送信
+        response = self.client.post(
+            self.url,
+            data=json.dumps({"cell": "not an int"}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("error", response.json())
+
+    def test_place_piece_cell_missing(self):
+        response = self.client.post(
+            self.url,
+            data=json.dumps({}),  # "cell" キーがない
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("error", response.json())
 
     def test_invalid_json_returns_400(self):
         response = self.client.post(
@@ -247,3 +292,20 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {"error": "Invalid JSON"})
+
+    @patch("othello.views.Rule")
+    def test_place_piece_rule_exception(self, MockRule):
+        # ロギングを一時的に無効化
+        logging.disable(logging.CRITICAL)
+        MockRule.side_effect = Exception("unexpected error")
+
+        response = self.client.post(
+            self.url,
+            data=json.dumps({"cell": 20}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json()["error"], "Internal server error")
+
+        # ロギングを有効化
+        logging.disable(logging.NOTSET)

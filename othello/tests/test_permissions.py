@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 import json
+from django.http import Http404
 
 from othello.models import AuthenticatedLocalMatch
 from othello.views import AuthenticatedLocalMatchPermissionMixin
@@ -41,6 +42,19 @@ class TestAuthenticatedLocalMatchPermissionMixin(TestCase):
         request.user = self.other_user
         view = TestView(request, {"pk": self.game.pk})
         with self.assertRaises(PermissionDenied):
+            view.get_object()
+
+    def test_get_object_not_found(self):
+        # 存在しないゲーム `pk` を指定した場合、Http404 が発生することを確認
+        class TestView(AuthenticatedLocalMatchPermissionMixin):
+            def __init__(self, request, kwargs):
+                self.request = request
+                self.kwargs = kwargs
+
+        request = self.factory.get("/")
+        request.user = self.user
+        view = TestView(request, {"pk": 999})  # 存在しないゲームの pk
+        with self.assertRaises(Http404):
             view.get_object()
 
 
@@ -110,7 +124,7 @@ class TestAuthenticatedLocalMatchAccessControl(
             (
                 lambda client, **kwargs: client.post(
                     reverse("place-piece", args=[kwargs["pk"]]),
-                    data=json.dumps({"cell": [2, 4]}),
+                    data=json.dumps({"cell": 20}),
                     content_type="application/json",
                 ),
                 {"pk": self.match.pk},

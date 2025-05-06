@@ -60,7 +60,6 @@ class CustomUserCreationFormTest(TestCase):
             "level": "beginner",  # カスタムフィールドであるlevelをテスト
         }
         form = CustomUserCreationForm(data=form_data)
-        print("FORM ERRORS:", form.errors)
         self.assertTrue(form.is_valid())
 
     def test_custom_user_creation_form_invalid_data(self):
