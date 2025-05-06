@@ -29,13 +29,13 @@ displayTurnIndicator(initialTurn);
 //パスボタンを押したときに、ターンを変更する関数
 document.getElementById('pass-turn').addEventListener('click', async function (event) {
     try {
-        const response = await fetch('/match/pass_turn/', {
+        const response = await fetch(`/match/local/{matchId}/pass-turn/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
             },
-            body: JSON.stringify({ turn: 'passed', pk: matchId })
+            body: JSON.stringify({})
         });
 
         const data = await response.json();
@@ -111,13 +111,13 @@ const responseDiv = document.getElementById('response');
 for (let i = 0; i < 64; i++) {
     document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function (event) {
         try {
-            const response = await fetch('/match/local/place-piece/', {
+            const response = await fetch(`/match/local/{matchId}/place-piece/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
                 },
-                body: JSON.stringify({ cell: i, pk: matchId })
+                body: JSON.stringify({ cell: i})
             });
 
             const data = await response.json();
@@ -161,13 +161,13 @@ const displayGameResult = (result) => {
 // ゲーム結果を取得し、取得した結果を表示する非同期関数
 const fetchGameResult = async () => {
     try {
-        const response = await fetch('/match/end-game/', {
+        const response = await fetch(`/match/local/{matchId}/end-game/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,  // CSRFトークンをヘッダーに追加
             },
-            body: JSON.stringify({ pk: matchId })
+            body: JSON.stringify({})
         });
 
         const data = await response.json();

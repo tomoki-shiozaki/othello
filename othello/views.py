@@ -33,9 +33,7 @@ class AuthenticatedLocalMatchListView(LoginRequiredMixin, ListView):
         )
 
 
-class AuthenticatedLocalMatchCreateView(
-    LoginRequiredMixin, AuthenticatedLocalMatchPermissionMixin, CreateView
-):
+class AuthenticatedLocalMatchCreateView(LoginRequiredMixin, CreateView):
     model = AuthenticatedLocalMatch
     template_name = "match/local/new.html"
     fields = (
