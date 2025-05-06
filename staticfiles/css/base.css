@@ -1,8 +1,8 @@
 html {
     height: 100%;
     margin: 0;
-    overflow-y: scroll;
     /* 常に縦スクロールバーを表示 */
+    overflow-y: scroll;
 }
 
 body {
@@ -11,27 +11,16 @@ body {
     margin: 0;
 }
 
-/* header {
-    background-color: green;
-    color: white;
-} */
-
-#site-name {
-    /* text-align: center; */
-    font-size: 2rem;
-}
-
 #site-name {
     color: #ffffff;
-    text-decoration: none;
+    font-size: 2rem;
     /* 下線を消す */
+    text-decoration: none;
     transition: color 0.2s ease;
 }
 
 #site-name:hover {
     color: #ffeb3b;
-    text-decoration: underline;
-    /* ホバー時に下線 */
     font-weight: bold;
 }
 

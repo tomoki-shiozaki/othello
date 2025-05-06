@@ -2,17 +2,7 @@
 
 {% block title %}ホーム{% endblock title %}
 {% block content %}
-<!-- {% if user.is_authenticated %}
-ようこそ、{{ user.username }}さん!
-<form method="POST" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-link">ログアウト</button>
-</form>
-{% else %}
-<p>ログインしていません</p>
-<a href="{% url 'login' %}">ログイン</a> |
-<a href="{% url 'signup' %}">サインアップ</a>
-{% endif %} -->
+
 <div class="container bg-light p-5">
     <h1 class="display-4">オセロアプリ</h1>
     <p class="lead">Djangoで作ったオセロアプリです。</p>

@@ -6,6 +6,9 @@ from .views import (
     AuthenticatedLocalMatchPlayView,
     AuthenticatedLocalMatchDeleteView,
     AuthenticatedLocalMatchCreateView,
+    AuthenticatedLocalMatchPlacePieceView,
+    PassTurnView,
+    EndGameView,
 )
 
 urlpatterns = [
@@ -32,10 +35,10 @@ urlpatterns = [
         name="local_match_play",
     ),
     path(
-        "local/place-piece/",
-        views.AuthenticatedLocalMatchPlacePieceView.as_view(),
+        "local/<int:pk>/place-piece/",
+        AuthenticatedLocalMatchPlacePieceView.as_view(),
         name="place-piece",
     ),
-    path("pass_turn/", views.pass_turn, name="pass_turn"),
-    path("end-game/", views.end_game_view, name="end_game"),
+    path("local/<int:pk>/pass-turn/", PassTurnView.as_view(), name="pass_turn"),
+    path("local/<int:pk>/end-game/", EndGameView.as_view(), name="end_game"),
 ]
