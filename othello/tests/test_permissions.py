@@ -2,6 +2,7 @@ from django.test import TestCase, RequestFactory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
+import json
 
 from othello.models import AuthenticatedLocalMatch
 from othello.views import AuthenticatedLocalMatchPermissionMixin
@@ -88,6 +89,9 @@ class TestAuthenticatedLocalMatchAccessControl(
             reverse("local_match_new"),
             reverse("local_match_delete", args=[self.match.pk]),
             reverse("local_match_play", args=[self.match.pk]),
+            reverse("place-piece", args=[self.match.pk]),
+            reverse("pass_turn", args=[self.match.pk]),
+            reverse("end_game", args=[self.match.pk]),
         ]
 
         self.permission_protected_urls = [
@@ -100,6 +104,30 @@ class TestAuthenticatedLocalMatchAccessControl(
             (
                 lambda client, **kwargs: client.get(
                     reverse("local_match_play", args=[kwargs["pk"]])
+                ),
+                {"pk": self.match.pk},
+            ),
+            (
+                lambda client, **kwargs: client.post(
+                    reverse("place-piece", args=[kwargs["pk"]]),
+                    data=json.dumps({"cell": [2, 4]}),
+                    content_type="application/json",
+                ),
+                {"pk": self.match.pk},
+            ),
+            (
+                lambda client, **kwargs: client.post(
+                    reverse("pass_turn", args=[kwargs["pk"]]),
+                    data=json.dumps({}),
+                    content_type="application/json",
+                ),
+                {"pk": self.match.pk},
+            ),
+            (
+                lambda client, **kwargs: client.post(
+                    reverse("end_game", args=[kwargs["pk"]]),
+                    data=json.dumps({}),
+                    content_type="application/json",
                 ),
                 {"pk": self.match.pk},
             ),

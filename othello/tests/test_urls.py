@@ -4,6 +4,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+import json
 
 from othello.models import AuthenticatedLocalMatch
 
@@ -45,3 +46,27 @@ class TestAuthenticatedLocalMatchAccess(TestOwnerLoginMixin, TestCase):
         response = self.client.get(reverse("local_match_play", args=[self.match.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Alice")
+
+    def test_owner_can_access_place_piece_view(self):
+        response = self.client.post(
+            reverse("place-piece", args=[self.match.pk]),
+            data=json.dumps({"cell": 0}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_owner_can_access_pass_turn_view(self):
+        response = self.client.post(
+            reverse("pass_turn", args=[self.match.pk]),
+            data=json.dumps({}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_owner_can_access_end_game_view(self):
+        response = self.client.post(
+            reverse("end_game", args=[self.match.pk]),
+            data=json.dumps({}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)

@@ -229,6 +229,16 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
         self.assertEqual(json_data["turn"], "white's turn")
         mock_rule_instance.place_and_reverse_pieces.assert_called_once()
 
+    # def test_place_piece_invalid_cell(self):
+    #     # 無効なセル（例えば、盤面外の座標など）を送信
+    #     response = self.client.post(
+    #         self.url,
+    #         data=json.dumps({"cell": 100}),  # 盤面外
+    #         content_type="application/json",
+    #     )
+    #     self.assertEqual(response.status_code, 400)
+    #     self.assertIn("error", response.json())
+
     def test_invalid_json_returns_400(self):
         response = self.client.post(
             self.url,
