@@ -1,37 +1,45 @@
 @startuml game_management_usecase
 skinparam defaultFontName "Noto Sans CJK JP"
+left to right direction
 
-!include common_actors.pu
+actor ログインユーザー as loggedInUser
+
+actor 黒のプレイヤー as blackPlayer
+actor 白のプレイヤー as whitePlayer
 
 rectangle "オセロアプリ" {
   package "ゲーム管理" {
-    (新規ゲーム作成)
-    (ローカル対戦)
-    (対局履歴リスト閲覧)
-    (対局削除)
-    (リモート対戦#検討中)
-    (CPU対戦#検討中)
-    (ローカル対戦#検討中)
+    (新しい対局を始める) as createNewGame
+    (対局履歴を閲覧する) as GameHistory
+    (対局を削除する) as deleteGame
+    (対局を再開する) as restartGame
+
+    (黒、白のプレイヤー名を\n入力する) as PlayerName
+    createNewGame ..> PlayerName : <<include>>
 }
+  package "ゲームプレイ" {
+    (ローカル対戦をプレイする) as playLocalGame
+    (駒を打つ) as placePiece
+    (パスをする) as passTurn
+    (勝敗判定を行う) as endGame
+    playLocalGame ..> placePiece : <<include>>
+    playLocalGame ..> passTurn : <<include>>
+    playLocalGame ..> endGame : <<include>>
+  }
 }
 
-loggedInUser --> (新規ゲーム作成)
-loggedInUser --> (ローカル対戦)
-loggedInUser --> (対局履歴リスト閲覧)
-loggedInUser --> (対局削除)
-loggedInUser --> (リモート対戦#検討中)
-unloggedUser --> (ローカル対戦#検討中)
-guest --> (ローカル対戦#検討中)
+loggedInUser --> createNewGame
+loggedInUser --> GameHistory
+loggedInUser --> deleteGame
+loggedInUser --> restartGame
 
-' ここで注釈を追加
-note bottom of (リモート対戦#検討中)
-  この機能は現在実装を検討中です。
-end note
-note bottom of (ローカル対戦#検討中)
-  この機能は現在実装を検討中です。
-end note
-note bottom of (CPU対戦#検討中)
-  この機能は現在実装を検討中です。
+blackPlayer --> playLocalGame
+whitePlayer --> playLocalGame
+
+note bottom of blackPlayer
+黒、白のプレイヤーの一方は
+ログインユーザー、もう一方は
+同じ場にいる他の人を想定
 end note
 
 @enduml

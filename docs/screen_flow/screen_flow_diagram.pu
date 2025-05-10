@@ -5,49 +5,38 @@ hide empty description
 
 title オセロアプリ 画面遷移図
 
-[*] --> ホーム画面
-state ホーム画面 {
-    state ログイン前
-    state ログイン後
-    ログイン前 --> ログイン後 : ログインする
-    ログイン後 --> ログイン前 : ログアウトする
-}
+legend left
+#LightBlue（青）: ユーザー用画面
+#MistyRose（ピンク）: ユーザーによる操作画面
+#LightYellow（黄色）: 表示系の画面
+end legend
 
+[*] --> notLogin
 
+state "ログイン用トップ画面" as notLogin
+state "ユーザー用トップ画面" as user #LightBlue
 
-state ゲーム管理 {
-    state 新規ゲーム作成
-    state ローカル対戦
-    state 対局履歴確認
-    state ゲーム削除
-    対局履歴確認 --> ローカル対戦 : 過去の対局を選択    
-    新規ゲーム作成 --> ローカル対戦 : ゲーム開始
-    対局履歴確認 --> ゲーム削除 : 対局削除
-    ゲーム削除 --> 対局履歴確認 :　ゲーム削除後
-}
+notLogin --> user : ユーザーがログインする
 
-state ゲームプレイ {
-    [*] --> 駒を打つ
-    [*] --> パスする
-    [*] --> 終局処理
-    終局処理 --> [*] : ゲーム終了
-    state 駒を打つ
-    state パスする
-    state 終局処理
+state "ユーザー利用メニュー\n新規ゲーム開始、過去の対局履歴確認、対戦、対局削除" as GameUse #LightBlue {
+    state "新しいゲームを開始する画面\n黒、白のプレイヤー名を入力する" as newGame <<操作>>
+    state "対戦する画面\n駒を打つ、パスする、勝敗判定を行う" as playGame <<操作>>
+    state "対局履歴を確認する画面\n過去のゲームのリストが表示される" as GameHistory <<表示>>
+    state "ゲームを削除する画面\n削除するボタンをクリックする" as deleteGame <<操作>>
+    GameHistory --> playGame : ゲームの「対局画面へ」\nリンクをクリック    
+    newGame --> playGame : 対局画面に移動
+    GameHistory --> deleteGame : ゲームの「削除」\nリンクをクリック
+    deleteGame --> GameHistory :　ゲーム削除後
+    playGame --> [*] 
 }
 
 ' ホーム画面とゲーム管理の遷移
-ログイン後 --> 新規ゲーム作成
-ログイン後 --> 対局履歴確認
+user --> newGame
+user --> GameHistory
 
-
-
-' ゲーム管理とゲームプレイの遷移
-ローカル対戦 --> ゲームプレイ : 対局開始
-
-
-
-
-
+skinparam state {
+  BackgroundColor<<操作>> MistyRose
+  BackgroundColor<<表示>> LightYellow
+}
 
 @enduml

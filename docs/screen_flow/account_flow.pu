@@ -1,0 +1,57 @@
+@startuml account_flow
+skinparam defaultFontName "Noto Sans CJK JP"
+hide empty description
+
+
+title オセロアプリ アカウント画面遷移図
+
+
+[*] -right-> notLogin
+
+    state "トップ画面\n ユーザー登録・ログインを選択する画面" as notLogin <<トップ画面>>
+    state "ログインユーザー用トップ画面\n ユーザーがログインした画面\n ログアウト・パスワード変更できる" as top <<トップ画面>>
+    top -left-> notLogin : アカウント名をクリック→ログアウト選択\n ユーザーがログアウトする
+
+state "アカウント利用メニュー\n ユーザー登録・ログイン・ログアウト・パスワード変更" as account1 {
+    state "ログイン画面\n ログイン名、パスワードを入力する" as login <<アカウント操作>>
+    state "ユーザー登録画面\n ログイン名、メールアドレス、パスワードを入力する" as userRegistration <<アカウント操作>>
+    
+    userRegistration --> login : ユーザー登録後
+    login --> login : ログイン失敗
+
+    state "パスワード変更画面\n メールアドレスを入力する" as passwordChange <<アカウント操作>>
+    state "パスワード変更確認画面\n パスワードを変更したというメッセージが表示される" as passwordConfirm <<確認>>
+    passwordChange --> passwordConfirm
+}
+
+notLogin --> login
+notLogin --> userRegistration
+
+top --> passwordChange : アカウント名クリック→パスワード変更選択
+login --> top : ログイン成功
+
+
+note top of notLogin
+【ヘッダーの共通操作】 
+    左上のアプリ名をクリックするとトップ画面に戻る
+endnote 
+
+note top of top
+【ヘッダーの共通操作】
+右上のアカウント名をクリックすると
+ログアウト・パスワード変更を選択できる
+end note
+
+skinparam state {
+  BackgroundColor<<トップ画面>> LightBlue
+  BackgroundColor<<アカウント操作>> MistyRose
+  BackgroundColor<<確認>> LightYellow
+}
+
+legend bottom 
+#LightBlue（青）：トップ画面
+#MistyRose（ピンク）：アカウント操作画面
+#LightYellow（黄色）：確認画面
+end legend
+
+@enduml

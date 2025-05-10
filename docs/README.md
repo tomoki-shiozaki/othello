@@ -85,8 +85,6 @@
   ![アカウント機能](usecase/account_usecase/account_usecase.svg)
 #### ゲーム管理
   ![ゲーム管理](usecase/game_management_usecase/game_management_usecase.svg)
-#### ゲームプレイ
-  ![ゲームプレイ](usecase/gameplay_usecase/gameplay_usecase.svg)
 #### 用語
   ユースケース図の用語は[こちら](usecase/usecase.md)をご覧ください。
 
@@ -118,11 +116,8 @@
 ### 3.2 画面遷移図
 #### 全体の推移
   ![画面遷移図](screen_flow/screen_flow_diagram/screen_flow.svg)
-#### ヘッダーの機能の推移
-  - アプリ名をクリックするとホーム画面に戻る
-  - 右上のボタンから、アカウント機能の操作ができる
-  - アカウント機能の操作の流れは、Djangoの標準的な認証システムに則っている
-    ![ヘッダーの機能の推移](screen_flow/header_flow/screen_header_flow.svg)
+#### アカウントの機能の推移
+  ![アカウント機能の推移](screen_flow/account_flow/account_flow.svg)
 
 ---
 
@@ -174,7 +169,7 @@
 | 要件定義・設計    | 2025/04/04〜2025/04/14     | 機能の洗い出し、ユースケース図、画面遷移図などの設計、ドキュメント作成          |
 | 実装（第2段階）            | 2025/04/14〜2025/04/27      | アカウント機能、ゲーム管理機能、ゲームプレイのリファクタリング      |
 | ドキュメント更新 | 2025/04/27~ | 実装中に生じた変更をドキュメントに反映 |
-| テスト | 2025/05/01~ | ユニットテストを実装 |
+| テスト | 2025/05/01~2025/05/06 | ユニットテストを実装 |
 
 
 ---

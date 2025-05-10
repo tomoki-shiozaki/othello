@@ -1,0 +1,25 @@
+@startuml er
+skinparam defaultFontName "Noto Sans CJK JP"
+entity "ユーザーアカウント" {
+  +アカウントID: INT <<PK>>
+  +ユーザー名: VARCHAR 255
+  +メールアドレス: VARCHAR 255
+  +パスワード: VARCHAR 255
+  +レベル: VARCHAR 15
+}
+
+entity "ログインユーザーのローカル対戦" {
+  +ゲームID: INT <<PK>>
+  +アカウントID : INT <<FK>>
+  +作成日時 : DATETIME
+  +更新日時 : DATETIME
+  +黒のプレイヤー名 : VARCHAR 255
+  +白のプレイヤー名 : VARCHAR 255
+  +ターン : VARCHAR 15
+  +盤面 : JSON 
+  +結果 : VARCHAR 15
+}
+
+"ユーザーアカウント" ||--o{ "ログインユーザーのローカル対戦" : アカウントID
+
+@enduml
