@@ -1,0 +1,17 @@
+/* @theme custom */
+
+@import "gaia";
+
+body {
+    font-family: 'Noto Sans CJK JP', sans-serif;
+}
+
+/* section::before {
+  content: attr(data-title);
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #444;
+} */
