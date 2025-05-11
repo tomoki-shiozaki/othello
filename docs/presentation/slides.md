@@ -3,7 +3,8 @@ title: オセロアプリの発表
 author: Shiozaki Tomoki
 
 marp: true
-theme: gaia
+
+theme: your-theme
 paginate: true
 slide: true
 _class: lead
