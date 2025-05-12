@@ -3,11 +3,19 @@
 ## 概要
 オセロアプリをDjangoで開発しています。現在(2025年5月10日)、オセロのローカル対戦機能を実装済みです。
 
+## 目的
+このプロジェクトは、以下を目的として開発しました：
+
+- Djangoの実践的な開発スキルを習得する
+- ロジック性の高いゲームを通して、設計・データ管理の経験を深める
+- フロントエンドとバックエンドの連携を一通り経験する
+- デプロイやユーザー管理、パーミッションなど、Webアプリ全体の構成を学ぶ
+
 ## 開発ドキュメント
 - 開発ドキュメントは[こちら](docs/README.md)をご覧ください。
 
 ## スライド
-- [スライド](docs/presentation/slides.pdf)
+- アプリの概要を簡単に説明したスライドを作成中です。（近日中に更新予定）。[こちら](docs/presentation/slides.pdf)をご覧ください。
 
 ## 機能一覧
 - ローカル対戦(同一画面で2人対戦)
@@ -59,5 +67,7 @@
 
 ## デプロイ
 - RenderとNeonでデプロイしています。URLは[こちら](https://othello-d46f.onrender.com/)です。
-- システム構成図は以下の通りです。詳細は[開発ドキュメント](docs/README.md)をご覧ください。
-  ### ![こちら](docs/system_architecture/system_architecture/system_architecture.svg)
+- システム構成図は以下の通りで、アプリ全体の構成を簡潔に示しています。
+##### システム構成図
+
+![システム構成図](docs/system_architecture/system_architecture/system_architecture.svg)
