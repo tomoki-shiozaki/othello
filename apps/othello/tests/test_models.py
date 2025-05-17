@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from othello.models import AuthenticatedLocalMatch
+from ..models import AuthenticatedLocalMatch
 
 
 # Create your tests here.

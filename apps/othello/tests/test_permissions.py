@@ -5,8 +5,8 @@ from django.urls import reverse
 import json
 from django.http import Http404
 
-from othello.models import AuthenticatedLocalMatch
-from othello.views import AuthenticatedLocalMatchPermissionMixin
+from ..models import AuthenticatedLocalMatch
+from ..views import AuthenticatedLocalMatchPermissionMixin
 
 
 class TestAuthenticatedLocalMatchPermissionMixin(TestCase):

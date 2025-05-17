@@ -48,9 +48,9 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     # Local
-    "accounts.apps.AccountsConfig",
-    "othello.apps.OthelloConfig",
-    "home.apps.HomeConfig",
+    "apps.accounts.apps.AccountsConfig",
+    "apps.othello.apps.OthelloConfig",
+    "apps.home.apps.HomeConfig",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

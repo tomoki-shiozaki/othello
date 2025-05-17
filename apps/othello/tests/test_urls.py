@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 import json
 
-from othello.models import AuthenticatedLocalMatch
+from ..models import AuthenticatedLocalMatch
 
 
 class TestOwnerLoginMixin:

@@ -5,8 +5,8 @@ import json
 from unittest.mock import patch
 import logging
 
-from othello.models import AuthenticatedLocalMatch
-from othello.views import AuthenticatedLocalMatchListView
+from ..models import AuthenticatedLocalMatch
+from ..views import AuthenticatedLocalMatchListView
 
 
 class AuthenticatedLocalMatchListViewTest(TestCase):
@@ -203,7 +203,7 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
         )
         self.url = reverse("place-piece", args=[self.match.pk])
 
-    @patch("othello.views.Rule")  # Rule をモックする
+    @patch("apps.othello.views.Rule")  # Rule をモックする
     def test_place_piece_successfully(self, MockRule):
         # モックの設定
         mock_rule_instance = MockRule.return_value
@@ -231,7 +231,7 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
         mock_rule_instance.place_and_reverse_pieces.assert_called_once()
 
     # 駒が置けない場合
-    @patch("othello.views.Rule")
+    @patch("apps.othello.views.Rule")
     def test_place_piece_not_allowed(self, MockRule):
         mock_rule_instance = MockRule.return_value
         mock_rule_instance.find_reversable_pieces.return_value = {
@@ -293,7 +293,7 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {"error": "Invalid JSON"})
 
-    @patch("othello.views.Rule")
+    @patch("apps.othello.views.Rule")
     def test_place_piece_rule_exception(self, MockRule):
         # ロギングを一時的に無効化
         logging.disable(logging.CRITICAL)
@@ -352,7 +352,7 @@ class EndGameViewViewTest(TestOwnerLoginMixin, TestCase):
         )
         self.url = reverse("end_game", args=[self.match.pk])
 
-    @patch("othello.views.end_game")
+    @patch("apps.othello.views.end_game")
     def test_end_game_black_wins(self, mock_end_game):
         # モックの設定
         mock_end_game.return_value = {
@@ -372,7 +372,7 @@ class EndGameViewViewTest(TestOwnerLoginMixin, TestCase):
         # end_game関数が正しい引数で呼ばれたことを確認
         mock_end_game.assert_called_once_with(self.match.board)
 
-    @patch("othello.views.end_game")
+    @patch("apps.othello.views.end_game")
     def test_end_game_draw(self, mock_end_game):
         mock_end_game.return_value = {
             "blackCount": 32,

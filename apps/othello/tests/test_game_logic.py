@@ -1,4 +1,4 @@
-from othello.logic import Rule, end_game
+from ..logic import Rule, end_game
 from django.test import TestCase
 
 
