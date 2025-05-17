@@ -2,6 +2,8 @@
 skinparam defaultFontName "Noto Sans CJK JP"
 left to right direction
 
+actor ゲストユーザー as guestuser
+
 actor ログインユーザー as loggedInUser
 
 actor 黒のプレイヤー as blackPlayer
@@ -28,6 +30,8 @@ rectangle "オセロアプリ" {
   }
 }
 
+guestuser --> createNewGame
+
 loggedInUser --> createNewGame
 loggedInUser --> GameHistory
 loggedInUser --> deleteGame
@@ -38,8 +42,8 @@ whitePlayer --> playLocalGame
 
 note bottom of blackPlayer
 黒、白のプレイヤーの一方は
-ログインユーザー、もう一方は
-同じ場にいる他の人を想定
+ログインユーザーないしゲストユーザー、
+もう一方は同じ場にいる他の人を想定
 end note
 
 @enduml
