@@ -7,21 +7,18 @@ title オセロアプリ 画面遷移図
 
 legend left
 #LightBlue（青）: ユーザー用画面
-#LightGreen（黄緑）: ゲストユーザー用画面
 #MistyRose（ピンク）: ユーザーによる操作画面
 #LightYellow（黄色）: 表示系の画面
 end legend
 
 [*] --> notLogin
 
-state "ユーザー選択画面\nログインorゲストを選択する" as notLogin
+state "ログイン用トップ画面" as notLogin
 state "ユーザー用トップ画面" as user #LightBlue
 
-
-' ログインユーザーの機能
 notLogin --> user : ユーザーがログインする
 
-state "ログインユーザー用ゲームメニュー\n新規ゲーム開始、過去の対局履歴確認、対戦、対局削除" as loginGameMenu #LightBlue {
+state "ユーザー利用メニュー\n新規ゲーム開始、過去の対局履歴確認、対戦、対局削除" as GameUse #LightBlue {
     state "新しいゲームを開始する画面\n黒、白のプレイヤー名を入力する" as newGame <<操作>>
     state "対戦する画面\n駒を打つ、パスする、勝敗判定を行う" as playGame <<操作>>
     state "対局履歴を確認する画面\n過去のゲームのリストが表示される" as GameHistory <<表示>>
@@ -36,18 +33,6 @@ state "ログインユーザー用ゲームメニュー\n新規ゲーム開始�
 ' ホーム画面とゲーム管理の遷移
 user --> newGame
 user --> GameHistory
-
-' ゲストユーザーの機能
-state "ゲストユーザー用トップ画面" as guestUserTop #LightGreen 
-notLogin --> guestUserTop : ゲストユーザーとしてオセロをプレイする
-
-state "ゲストユーザー用ゲームメニュー\n新規ゲーム開始、対戦" as guestGameMenu #LightGreen {
-  state "新しいゲームを開始する画面\n黒、白のプレイヤー名を入力する" as newGuestGame <<操作>>
-  state "対戦する画面\n駒を打つ、パスする、勝敗判定を行う" as playGuestGame <<操作>>
-  newGuestGame -->playGuestGame
-}
-guestUserTop --> newGuestGame
-playGuestGame --> guestUserTop 
 
 skinparam state {
   BackgroundColor<<操作>> MistyRose
