@@ -14,12 +14,14 @@ end legend
 
 [*] --> notLogin
 
-state "ユーザー選択画面\nログインorゲストを選択する" as notLogin
-state "ユーザー用トップ画面" as user #LightBlue
+state "ユーザー選択画面\nログイン、サインアップ、ゲストのいずれかを選択する" as notLogin
+state "ログイン画面" as login
+state "ログインユーザー用トップ画面" as user #LightBlue
 
 
 ' ログインユーザーの機能
-notLogin --> user : ユーザーがログインする
+notLogin --> login : ログインを選択
+login --> user 
 
 state "ログインユーザー用ゲームメニュー\n新規ゲーム開始、過去の対局履歴確認、対戦、対局削除" as loginGameMenu #LightBlue {
     state "新しいゲームを開始する画面\n黒、白のプレイヤー名を入力する" as newGame <<操作>>
@@ -39,7 +41,7 @@ user --> GameHistory
 
 ' ゲストユーザーの機能
 state "ゲストユーザー用トップ画面" as guestUserTop #LightGreen 
-notLogin --> guestUserTop : ゲストユーザーとしてオセロをプレイする
+notLogin --> guestUserTop : ゲストを選択
 
 state "ゲストユーザー用ゲームメニュー\n新規ゲーム開始、対戦" as guestGameMenu #LightGreen {
   state "新しいゲームを開始する画面\n黒、白のプレイヤー名を入力する" as newGuestGame <<操作>>
