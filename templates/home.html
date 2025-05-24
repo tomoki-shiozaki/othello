@@ -22,14 +22,17 @@
     <!-- ログイン前のトップ画面 -->
     <div class="text-center">
         <h2 class="h4 mb-4" style="font-weight: bold;">以下のボタンからアカウント登録・ログインしてください</h2>
-        <p class="lead mb-4">
+        <div class="lead mb-4">
             <a href="{% url 'login' %}" class="btn btn-outline-dark btn-lg mx-3 my-2">ログイン</a>
             <a href="{% url 'signup' %}" class="btn btn-dark btn-lg mx-3 my-2">新規登録</a>
-        </p>
-        <h2 class="h4 mb-4" style="font-weight: bold;">ログインせずに、ゲストユーザーとしてオセロゲームをプレイすることもできます。</h2>
-        <p class="lead">
+        </div>
+        <h2 class="h4 mb-4 fw-bold">
+            ログインせずに、ゲストユーザーとしてオセロゲームをプレイすることもできます。
+        </h2>
+        <div class="lead">
             <a href="{% url 'guest_games:home' %}" class="btn btn-dark btn-lg mx-3 my-2">ゲストトップ画面</a>
-        </p>
+        </div>
+
     </div>
     {% endif %}
 </div>
