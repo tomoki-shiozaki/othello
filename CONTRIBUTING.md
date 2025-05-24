@@ -59,7 +59,7 @@
 
 - **URL設計**：
   `名詞 + 動詞`。名詞（リソース）は複数形にする。    
-  例：`/articles/`, `/articles/<id>/`, `/articles/create/`, `/articles/<id>/edit/`, `/articles/<id>/delete/`
+  例：`/articles/`, `/articles/<id>/`, `/articles/new/`, `/articles/<id>/edit/`, `/articles/<id>/delete/`
 
 - **URL名（name属性）**：  
   `名詞 + 状態`  
@@ -69,7 +69,7 @@
 
 - **テンプレートファイル名**：  
   `モデル名（小文字） + アンダースコア + 動詞`  
-  例：`book_form.html`, `article_list.html`, `article_create.html`, `article_delete.html`
+  例：`book_form.html`, `article_list.html`, `article_new.html`, `article_delete.html`
 
 - **テンプレート構成**：
   `アプリ名　＋　テンプレートファイル名`
@@ -83,6 +83,10 @@
 
   - **複数形や複合形**（複数ユーザー向けや複数のエンティティを含む場合）：  
     例：`accounts`, `user_libraries`, `posts`
+
+- **テスト名**：  
+  `Test(プレフィックス)+モデル・機能+ビューの種類`  
+  例：`TestArticleCreateView`
 
   プロジェクト全体で統一した形式を採用し、一貫性を保つことが重要です。
 
