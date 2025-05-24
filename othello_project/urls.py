@@ -24,4 +24,5 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("match/", include("apps.othello.urls")),
     path("", include("apps.home.urls")),
+    path("guest/", include("apps.guest_games.urls")),
 ]

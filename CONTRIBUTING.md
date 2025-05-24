@@ -50,20 +50,30 @@
 #### Django固有の命名ルール例
 
 - **クラスベースビュー（CBV）**：  
-  `モデル名 + 動詞 + View` で命名  
+  `モデル名 + 動詞 + View` で命名。モデル名は単数形を使う。    
   例：`BookCreateView`, `UserListView`
 
 - **関数ベースビュー（FBV）**：  
-  `動詞 + モデル名` のスネークケース  
-  例：`create_book`, `list_users`
+  `動詞 + 対象` のスネークケース  
+  例：`create_book`, `detail_article`, `list_user`, `edit_article`, `delete_article`
+
+- **URL設計**：
+  `名詞 + 動詞`。名詞（リソース）は複数形にする。    
+  例：`/articles/`, `/articles/<id>/`, `/articles/create/`, `/articles/<id>/edit/`, `/articles/<id>/delete/`
 
 - **URL名（name属性）**：  
-  関数ベースビューと同様に `動詞 + モデル名`  
-  例：`create_book`, `list_users`
+  `名詞 + 状態`  
+  例：`book_create`, `user_list`  
+  もしくは、名前空間app_nameを使う（こちらを推奨）：  
+  例：`app_name="articles"とし、name="list"`。他の場所では`articles:list`として参照
 
 - **テンプレートファイル名**：  
   `モデル名（小文字） + アンダースコア + 動詞`  
-  例：`book_form.html`, `user_list.html`
+  例：`book_form.html`, `article_list.html`, `article_create.html`, `article_delete.html`
+
+- **テンプレート構成**：
+  `アプリ名　＋　テンプレートファイル名`
+  例：`articles/article_list.html`
 
   これらを守ることで、ファイルやクラスの役割が一目でわかりやすくなります。
 - **アプリ名**：

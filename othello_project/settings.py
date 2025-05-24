@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "apps.accounts.apps.AccountsConfig",
     "apps.othello.apps.OthelloConfig",
     "apps.home.apps.HomeConfig",
+    "apps.guest_games.apps.GuestGamesConfig",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
