@@ -116,14 +116,14 @@ class GuestGamePassTurnView(View):
         )
 
 
-class EndGameView(View):
-    def post(self, request, pk):
-        game = self.get_object()  # mixinでチェック済み
+class GuestGameEndView(View):
+    def post(self, request):
+        game = request.session.get("guest_game")
 
-        results = end_game(game.board)
+        results = end_game(game["board"])
         # 対局結果をデータベースに格納する
-        game.result = results["winner"]
+        game["result"] = results["winner"]
         # 変更を保存
-        game.save()
+        request.session["guest_game"] = game
 
         return JsonResponse(results)

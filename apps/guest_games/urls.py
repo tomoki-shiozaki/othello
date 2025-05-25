@@ -5,6 +5,7 @@ from apps.guest_games.views import (
     GuestGameStartView,
     GuestGamePlacePieceView,
     GuestGamePassTurnView,
+    GuestGameEndView,
 )
 from apps.guest_games.views import guest_play_view
 
@@ -20,5 +21,5 @@ urlpatterns = [
         name="place-piece",
     ),
     path("play/pass-turn/", GuestGamePassTurnView.as_view(), name="pass_turn"),
-    # path("local/<int:pk>/end-game/", EndGameView.as_view(), name="end_game"),
+    path("play/end-game/", GuestGameEndView.as_view(), name="end_game"),
 ]

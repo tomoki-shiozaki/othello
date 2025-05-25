@@ -162,7 +162,7 @@ const displayGameResult = (result) => {
 // ゲーム結果を取得し、取得した結果を表示する非同期関数
 const fetchGameResult = async () => {
     try {
-        const response = await fetch(`/match/local/${matchId}/end-game/`, {
+        const response = await fetch(`/guest/play/end-game/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
