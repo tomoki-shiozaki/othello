@@ -28,7 +28,9 @@ class TopPageViewTests(TestCase):
 
     def test_top_page_for_anonymous_user(self):
         response = self.client.get(self.url)
-        self.assertContains(response, "アカウント登録・ログインしてください")
+        self.assertContains(
+            response, "アカウント登録で、対局データの保存や履歴確認が可能になります"
+        )
         self.assertContains(response, f'href="{reverse("login")}"')
         self.assertContains(response, f'href="{reverse("signup")}"')
         self.assertContains(response, f'href="{reverse("guest_games:home")}"')

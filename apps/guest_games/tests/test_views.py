@@ -1,50 +1,54 @@
-# from django.test import TestCase, RequestFactory
-# from django.contrib.auth import get_user_model
-# from django.urls import reverse
-# import json
-# from unittest.mock import patch
-# import logging
-
-# from ..models import AuthenticatedLocalMatch
-# from ..views import AuthenticatedLocalMatchListView
+from django.test import TestCase
+from django.urls import reverse
 
 
-# class TestGuestGameCreateView(TestOwnerLoginMixin, TestCase):
-#     def setUp(self):
-#         self.user = self.login_user()
-#         self.create_url = reverse("local_match_new")
+class TestGuestGameHomeView(TestCase):
+    def test_get_renders_template(self):
+        response = self.client.get(reverse("guest_games:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "guest_games/guest_game_home.html")
 
-#     def test_create_match_success(self):
-#         response = self.client.post(
-#             self.create_url,
-#             {
-#                 "black_player": "Alice",
-#                 "white_player": "Bob",
-#             },
-#         )
 
-#         # リダイレクトされているか（CreateViewの成功時）
-#         self.assertEqual(response.status_code, 302)
+class TestGuestGameStartView(TestCase):
+    def test_get_renders_template(self):
+        response = self.client.get(reverse("guest_games:new"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "guest_games/guest_game_new.html")
 
-#         # 作成されたオブジェクトを確認
-#         match = AuthenticatedLocalMatch.objects.first()
-#         self.assertIsNotNone(match)
-#         self.assertEqual(match.black_player, "Alice")
-#         self.assertEqual(match.white_player, "Bob")
-#         self.assertEqual(match.authenticated_user, self.user)
+    def test_post_valid_data_sets_session_and_redirects(self):
+        data = {
+            "black_player": "たろう",
+            "white_player": "はなこ",
+        }
+        response = self.client.post(reverse("guest_games:new"), data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("guest_games:play"))
 
-#     def test_uses_correct_template(self):
-#         response = self.client.get(self.create_url)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTemplateUsed(response, "match/local/new.html")
+        session_game = self.client.session.get("guest_game")
+        self.assertIsNotNone(session_game)
+        self.assertEqual(session_game["black_player"], "たろう")
+        self.assertEqual(session_game["white_player"], "はなこ")
 
-#     def test_invalid_form(self):
-#         # 空フォーム送信（black_player, white_playerともに入力必須。バリデーションエラーが起こる）
-#         response = self.client.post(self.create_url, {})
-#         self.assertEqual(response.status_code, 200)
-#         self.assertFormError(
-#             response.context["form"], "black_player", "このフィールドは必須です。"
-#         )
-#         self.assertFormError(
-#             response.context["form"], "white_player", "このフィールドは必須です。"
-#         )
+
+class TestGuestPlayView(TestCase):
+    def test_redirects_if_no_session(self):
+        response = self.client.get(reverse("guest_games:play"))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("guest_games:new"))
+
+    def test_with_session_renders_template(self):
+        session = self.client.session
+        session["guest_game"] = {
+            "black_player": "たろう",
+            "white_player": "はなこ",
+            "turn": "black's turn",
+            "board": [["empty"] * 8 for _ in range(8)],
+            "result": "対局中",
+        }
+        session.save()
+
+        response = self.client.get(reverse("guest_games:play"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "guest_games/guest_game_play.html")
+        self.assertIn("game", response.context)
+        self.assertEqual(response.context["game"]["black_player"], "たろう")

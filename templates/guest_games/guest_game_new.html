@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>新しい対局</h1>
+<h1>ゲスト対局を開始</h1>
 <form action="" method="post">{% csrf_token %}
     {{ form.as_p }}
-    <button class="btn btn-success ml-2" type="submit">新規ゲーム作成</button>
+    <button class="btn btn-success ml-2" type="submit">ゲーム開始</button>
 </form>
 {% endblock content %}

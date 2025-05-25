@@ -86,7 +86,7 @@
 
 - **テスト名**：  
   `Test(プレフィックス)+モデル・機能+ビューの種類`  
-  例：`TestArticleCreateView`
+  例：`TestArticleCreateView`, `TestArticleAccess`
 
   プロジェクト全体で統一した形式を採用し、一貫性を保つことが重要です。
 
