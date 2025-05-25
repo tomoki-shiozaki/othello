@@ -112,7 +112,7 @@ const responseDiv = document.getElementById('response');
 for (let i = 0; i < 64; i++) {
     document.getElementById(`othello-grid-item${i}`).addEventListener('click', async function (event) {
         try {
-            const response = await fetch(`/match/local/${matchId}/place-piece/`, {
+            const response = await fetch(`/guest/play/place-piece/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
