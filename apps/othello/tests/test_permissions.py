@@ -103,7 +103,7 @@ class TestAuthenticatedLocalMatchAccessControl(
             reverse("local_match_new"),
             reverse("local_match_delete", args=[self.match.pk]),
             reverse("local_match_play", args=[self.match.pk]),
-            reverse("place-piece", args=[self.match.pk]),
+            reverse("place_piece", args=[self.match.pk]),
             reverse("pass_turn", args=[self.match.pk]),
             reverse("end_game", args=[self.match.pk]),
         ]
@@ -123,7 +123,7 @@ class TestAuthenticatedLocalMatchAccessControl(
             ),
             (
                 lambda client, **kwargs: client.post(
-                    reverse("place-piece", args=[kwargs["pk"]]),
+                    reverse("place_piece", args=[kwargs["pk"]]),
                     data=json.dumps({"cell": 20}),
                     content_type="application/json",
                 ),

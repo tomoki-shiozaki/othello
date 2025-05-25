@@ -49,7 +49,7 @@ class TestAuthenticatedLocalMatchAccess(TestOwnerLoginMixin, TestCase):
 
     def test_owner_can_access_place_piece_view(self):
         response = self.client.post(
-            reverse("place-piece", args=[self.match.pk]),
+            reverse("place_piece", args=[self.match.pk]),
             data=json.dumps({"cell": 0}),
             content_type="application/json",
         )

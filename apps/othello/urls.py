@@ -37,7 +37,7 @@ urlpatterns = [
     path(
         "local/<int:pk>/place-piece/",
         AuthenticatedLocalMatchPlacePieceView.as_view(),
-        name="place-piece",
+        name="place_piece",
     ),
     path("local/<int:pk>/pass-turn/", PassTurnView.as_view(), name="pass_turn"),
     path("local/<int:pk>/end-game/", EndGameView.as_view(), name="end_game"),

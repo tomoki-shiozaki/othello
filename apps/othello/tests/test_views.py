@@ -201,7 +201,7 @@ class AuthenticatedLocalMatchPlacePieceViewTest(TestOwnerLoginMixin, TestCase):
             black_player="Alice",
             white_player="Bob",
         )
-        self.url = reverse("place-piece", args=[self.match.pk])
+        self.url = reverse("place_piece", args=[self.match.pk])
 
     @patch("apps.othello.views.Rule")  # Rule をモックする
     def test_place_piece_successfully(self, MockRule):

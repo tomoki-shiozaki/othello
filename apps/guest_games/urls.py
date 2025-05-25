@@ -18,7 +18,7 @@ urlpatterns = [
     path(
         "play/place-piece/",
         GuestGamePlacePieceView.as_view(),
-        name="place-piece",
+        name="place_piece",
     ),
     path("play/pass-turn/", GuestGamePassTurnView.as_view(), name="pass_turn"),
     path("play/end-game/", GuestGameEndView.as_view(), name="end_game"),
