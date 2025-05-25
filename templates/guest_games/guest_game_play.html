@@ -11,10 +11,8 @@
 {% block content %}
 <!-- JavaScriptで使用するCSRFトークンとゲーム初期データを、data属性でHTMLに埋め込む -->
 <div id="csrf-data" data-csrf="{{ csrf_token }}"></div>
-<div id="initial-match-data" 
-    data-initial-black-player = "{{ game.black_player }}"
-    data-initial-white-player = "{{ game.white_player }}"
-    data-initial-turn="{{ game.turn }}"
+<div id="initial-match-data" data-initial-black-player="{{ game.black_player }}"
+    data-initial-white-player="{{ game.white_player }}" data-initial-turn="{{ game.turn }}"
     data-initial-status="{{ game.result }}">
 </div>
 <!-- JavaScriptで使用するゲーム盤面初期データをjson_scriptを用いてHTMLに出力する -->
@@ -35,8 +33,10 @@
 
 <!-- パスと終局処理をするためのボタン -->
 <div class="othello-button-container">
-    <button type="button" class="btn btn-secondary btn-lg" id="pass-turn">パス</button>
-    <button type="button" class="btn btn-secondary btn-lg" id="end-game">終局</button>
+    <button type="button" class="btn btn-outline-warning btn-lg" id="pass-turn" data-bs-toggle="tooltip" data-bs-placement="top"
+        title="打てる場所がないときに使用">パス</button>
+    <button type="button" class="btn btn-danger btn-lg" id="end-game" data-bs-toggle="tooltip" data-bs-placement="top"
+        title="ゲームを終了して結果を確定します">終局</button>
 </div>
 
 <!-- ゲーム結果を表示する -->
@@ -46,6 +46,10 @@
     <p class="result">対局中</p>
 </div>
 
+<!-- 戻るボタンを配置 -->
+<div class="navigation-buttons mt-4">
+    <a href="{% url 'guest_games:home' %}" class="btn btn-outline-primary">ゲストトップへ戻る</a>
+</div>
 
 {% endblock content %}
 

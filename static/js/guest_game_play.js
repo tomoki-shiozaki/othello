@@ -9,6 +9,10 @@ const initialTurn = initialMatchElement.dataset.initialTurn;
 const initialBoard = JSON.parse(document.getElementById('board-data').textContent);
 const initialStatus = initialMatchElement.dataset.initialStatus;
 
+// ツールチップを有効化する
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
+
 // --- ターン管理: 表示と制御に関する処理 ---
 
 //displayTurnIndicator()関数は、プレイヤーターン（黒か白）を表示する関数
@@ -190,7 +194,7 @@ if (initialStatus !== "対局中") {
 
 // 終局ボタンを押したら、終局処理を行う
 document.getElementById('end-game').addEventListener('click', async function () {
-    const answer = confirm("本当にゲームを終了しますか？OKとすると、黒白それぞれの枚数を数えて、勝敗を決定します。");
+    const answer = confirm("ゲームを終了して、勝敗を確定します。本当によろしいですか？");
     if (answer) {
         fetchGameResult()
     }
