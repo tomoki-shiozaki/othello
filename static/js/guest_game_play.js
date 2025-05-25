@@ -30,7 +30,7 @@ displayTurnIndicator(initialTurn);
 //パスボタンを押したときに、ターンを変更する関数
 document.getElementById('pass-turn').addEventListener('click', async function (event) {
     try {
-        const response = await fetch(`/match/local/${matchId}/pass-turn/`, {
+        const response = await fetch(`/guest/play/pass-turn/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

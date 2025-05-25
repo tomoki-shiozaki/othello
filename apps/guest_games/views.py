@@ -98,18 +98,20 @@ class GuestGamePlacePieceView(View):
             return JsonResponse({"error": "Internal server error"}, status=500)
 
 
-class PassTurnView(View):
-    def post(self, request, pk):
-        game = self.get_object()  # mixinでチェック済み
+class GuestGamePassTurnView(View):
+    def post(self, request):
+        game = request.session.get("guest_game")
 
         # ターン切り替え
-        game.turn = "white's turn" if game.turn == "black's turn" else "black's turn"
-        game.save()
+        game["turn"] = (
+            "white's turn" if game["turn"] == "black's turn" else "black's turn"
+        )
+        request.session["guest_game"] = game
 
         return JsonResponse(
             {
                 "message": "Player passed.",
-                "turn": game.turn,
+                "turn": game["turn"],
             }
         )
 
