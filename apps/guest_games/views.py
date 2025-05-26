@@ -58,6 +58,8 @@ class GuestGamePlacePieceView(View):
                 return JsonResponse({"error": "Invalid cell value"}, status=400)
 
             game = request.session.get("guest_game")
+            if not game:
+                return JsonResponse({"error": "Game session not found"}, status=404)
             board = game["board"]
             turn = game["turn"]
 
@@ -89,8 +91,6 @@ class GuestGamePlacePieceView(View):
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
-        except PermissionDenied:
-            return JsonResponse({"error": "Permission denied"}, status=403)
         except Http404:
             return JsonResponse({"error": "Not found"}, status=404)
         except Exception as e:
