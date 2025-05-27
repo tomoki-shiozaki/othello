@@ -56,6 +56,30 @@ class TestGuestPlayView(TestCase):
         self.assertIn("game", response.context)
         self.assertEqual(response.context["game"]["black_player"], "たろう")
 
+    def test_redirects_if_session_data_is_invalid(self):
+        session = self.client.session
+        session["guest_game"] = {"invalid": "data"}  # boardなどが足りない
+        session.save()
+
+        response = self.client.get(reverse("guest_games:play"))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("guest_games:new"))
+
+    def test_redirects_if_board_cell_value_invalid(self):
+        session = self.client.session
+        session["guest_game"] = {
+            "black_player": "たろう",
+            "white_player": "はなこ",
+            "turn": "black's turn",
+            "board": [["invalid"] * 8 for _ in range(8)],  # 不正なcell
+            "result": "対局中",
+        }
+        session.save()
+
+        response = self.client.get(reverse("guest_games:play"))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("guest_games:new"))
+
 
 class TestGuestGamePlacePieceView(TestCase):
     def setUp(self):

@@ -86,9 +86,26 @@
 
 - **テスト名**：  
   `Test(プレフィックス)+モデル・機能+ビューの種類`  
-  例：`TestArticleCreateView`, `TestArticleAccess`
+  例：`TestArticleCreateView`, `TestArticleAccess`, `TestBookModel`
 
   プロジェクト全体で統一した形式を採用し、一貫性を保つことが重要です。
+
+### 時間・日時フィールドの命名規則
+
+当プロジェクトでは、モデルやコード内の時間・日時を表すフィールド名について、以下の命名ルールを採用します。
+
+#### 1. 日時（年月日時分秒）を表す場合
+- フィールド名は `_at` で終わる形を用います。
+- 例：`created_at`, `updated_at`, `published_at`
+
+#### 2. 日付のみ（時間を含まない）を表す場合
+- フィールド名は `_date` または `_on` を用います。（`_on`を推奨）
+- 例：`due_date`, `published_on`
+
+#### 3. 時刻のみ（時間・分・秒を表す）を表す場合
+- フィールド名は `_time` を用います。
+- 例：`start_time`, `end_time`
+
 
 ### 静的解析ツール
 

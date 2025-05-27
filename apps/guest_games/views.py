@@ -6,7 +6,6 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from django.views import View
 from django.http import JsonResponse
-from django.core.exceptions import PermissionDenied
 from django.http import Http404
 
 from apps.guest_games.forms import GuestGameCreationForm
@@ -36,6 +35,53 @@ class GuestGameStartView(FormView):
         return super().form_valid(form)
 
 
+class GuestGameSessionMixin:
+    def get_guest_game(self, request):
+        game = request.session.get("guest_game")
+        if game is None:
+            raise Http404("Game session not found")
+
+        if not isinstance(game, dict):
+            raise ValueError("Game session is corrupted (invalid format)")
+
+        # boardが8行で、各行が8要素のリストかどうかを確認
+        board = game.get("board")
+        if not (isinstance(board, list) and len(board) == 8):
+            raise ValueError("Invalid board data: must have 8 rows")
+        for row in board:
+            if not (isinstance(row, list) and len(row) == 8):
+                raise ValueError("Invalid board data: each row must have 8 columns")
+
+        # 盤面の要素の型チェック（全てstrか）と検証
+        valid_cells = {"black", "white", "empty"}
+        for row in board:
+            for cell in row:
+                # 駒の状態が文字列かどうか
+                if not isinstance(cell, str):
+                    raise ValueError("Invalid board cell data: must be string")
+                if cell not in valid_cells:
+                    raise ValueError(
+                        f"Invalid board cell value: {cell} (must be one of {valid_cells})"
+                    )
+
+        # turnの検証
+        if game.get("turn") not in ("black's turn", "white's turn"):
+            raise ValueError("Invalid turn data")
+
+        # player名の検証（文字列か）
+        if not all(
+            isinstance(game.get(k), str) for k in ("black_player", "white_player")
+        ):
+            raise ValueError("Invalid player data")
+
+        # resultの検証（想定値）
+        valid_results = {"対局中", "black", "white", "draw"}
+        if game.get("result") not in valid_results:
+            raise ValueError("Invalid game result")
+
+        return game
+
+
 def guest_play_view(request):
     game = request.session.get("guest_game")
     if not game:
@@ -44,10 +90,21 @@ def guest_play_view(request):
     return render(request, "guest_games/guest_game_play.html", {"game": game})
 
 
+class GuestGamePlayView(GuestGameSessionMixin, TemplateView):
+    template_name = "guest_games/guest_game_play.html"
+
+    def get(self, request, *args, **kwargs):
+        try:
+            game = self.get_guest_game(request)
+        except (Http404, ValueError):
+            return redirect("guest_games:new")
+        return self.render_to_response({"game": game})
+
+
 logger = logging.getLogger(__name__)
 
 
-class GuestGamePlacePieceView(View):
+class GuestGamePlacePieceView(GuestGameSessionMixin, View):
     def post(self, request):
         try:
             # リクエストボディをJSONとしてパース
@@ -57,9 +114,7 @@ class GuestGamePlacePieceView(View):
             if not isinstance(cell, int) or not (0 <= cell <= 63):
                 return JsonResponse({"error": "Invalid cell value"}, status=400)
 
-            game = request.session.get("guest_game")
-            if not game:
-                return JsonResponse({"error": "Game session not found"}, status=404)
+            game = self.get_guest_game(request)
             board = game["board"]
             turn = game["turn"]
 
@@ -92,7 +147,9 @@ class GuestGamePlacePieceView(View):
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
         except Http404:
-            return JsonResponse({"error": "Not found"}, status=404)
+            return JsonResponse({"error": "Game session not found"}, status=404)
+        except ValueError as e:
+            return JsonResponse({"error": str(e)}, status=400)
         except Exception as e:
             logger.exception(f"Unexpected error in GuestGamePlacePieceView: {str(e)}")
             return JsonResponse({"error": "Internal server error"}, status=500)

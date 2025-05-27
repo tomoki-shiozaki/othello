@@ -6,6 +6,7 @@ from apps.guest_games.views import (
     GuestGameHomeView,
     GuestGameStartView,
     guest_play_view,
+    GuestGamePlayView,
 )
 
 
@@ -21,7 +22,7 @@ class TestGuestGameAccess(TestCase):
 
     def test_play_url_resolves(self):
         url = reverse("guest_games:play")
-        self.assertEqual(resolve(url).func, guest_play_view)
+        self.assertEqual(resolve(url).func.view_class, GuestGamePlayView)
 
     def test_home_url_returns_200(self):
         response = self.client.get(reverse("guest_games:home"))

@@ -7,14 +7,14 @@ from apps.guest_games.views import (
     GuestGamePassTurnView,
     GuestGameEndView,
 )
-from apps.guest_games.views import guest_play_view
+from apps.guest_games.views import guest_play_view, GuestGamePlayView
 
 app_name = "guest_games"
 
 urlpatterns = [
     path("", GuestGameHomeView.as_view(), name="home"),
     path("new/", GuestGameStartView.as_view(), name="new"),
-    path("play/", guest_play_view, name="play"),
+    path("play/", GuestGamePlayView.as_view(), name="play"),
     path(
         "play/place-piece/",
         GuestGamePlacePieceView.as_view(),
