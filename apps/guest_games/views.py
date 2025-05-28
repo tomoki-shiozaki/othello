@@ -118,6 +118,9 @@ class GuestGamePlacePieceView(GuestGameSessionMixin, View):
             board = game["board"]
             turn = game["turn"]
 
+            if game.get("result") != "対局中":
+                return JsonResponse({"error": "Game has already ended."}, status=400)
+
             # ゲームのロジック処理を行う
             # Ruleクラスはゲームのルールを記述したクラス
             rule = Rule(board, cell, turn)
@@ -155,32 +158,51 @@ class GuestGamePlacePieceView(GuestGameSessionMixin, View):
             return JsonResponse({"error": "Internal server error"}, status=500)
 
 
-class GuestGamePassTurnView(View):
+class GuestGamePassTurnView(GuestGameSessionMixin, View):
     def post(self, request):
-        game = request.session.get("guest_game")
+        try:
+            game = self.get_guest_game(request)
 
-        # ターン切り替え
-        game["turn"] = (
-            "white's turn" if game["turn"] == "black's turn" else "black's turn"
-        )
-        request.session["guest_game"] = game
+            if game.get("result") != "対局中":
+                return JsonResponse({"error": "Game has already ended."}, status=400)
 
-        return JsonResponse(
-            {
-                "message": "Player passed.",
-                "turn": game["turn"],
-            }
-        )
+            # ターン切り替え
+            game["turn"] = (
+                "white's turn" if game["turn"] == "black's turn" else "black's turn"
+            )
+            request.session["guest_game"] = game
+
+            return JsonResponse(
+                {
+                    "message": "Player passed.",
+                    "turn": game["turn"],
+                }
+            )
+
+        except Http404:
+            return JsonResponse({"error": "Game session not found"}, status=404)
+        except ValueError as e:
+            return JsonResponse({"error": str(e)}, status=400)
+        except Exception as e:
+            logger.exception(f"Unexpected error in GuestGamePassTurnView: {str(e)}")
+            return JsonResponse({"error": "Internal server error"}, status=500)
 
 
-class GuestGameEndView(View):
+class GuestGameEndView(GuestGameSessionMixin, View):
     def post(self, request):
-        game = request.session.get("guest_game")
+        try:
+            game = self.get_guest_game(request)
 
-        results = end_game(game["board"])
-        # 対局結果をデータベースに格納する
-        game["result"] = results["winner"]
-        # 変更を保存
-        request.session["guest_game"] = game
+            results = end_game(game["board"])
+            game["result"] = results["winner"]
+            request.session["guest_game"] = game
 
-        return JsonResponse(results)
+            return JsonResponse(results)
+
+        except Http404:
+            return JsonResponse({"error": "Game session not found"}, status=404)
+        except ValueError as e:
+            return JsonResponse({"error": str(e)}, status=400)
+        except Exception as e:
+            logger.exception(f"Unexpected error in GuestGameEndView: {str(e)}")
+            return JsonResponse({"error": "Internal server error"}, status=500)

@@ -200,6 +200,20 @@ class TestGuestGamePlacePieceView(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {"error": "Invalid JSON"})
 
+    def test_place_piece_when_game_already_ended(self):
+        session = self.client.session
+        session["guest_game"]["result"] = "white"  # ゲーム終了状態
+        session.save()
+
+        response = self.client.post(
+            self.url,
+            data=json.dumps({"cell": 10}),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json(), {"error": "Game has already ended."})
+
     @patch("apps.guest_games.views.Rule")
     def test_place_piece_rule_exception(self, MockRule):
         # ロギングを一時的に無効化
@@ -256,6 +270,34 @@ class TestGuestGamePassTurnView(TestCase):
         self.assertEqual(game_data["turn"], "black's turn")
         self.assertEqual(response.json()["message"], "Player passed.")
         self.assertEqual(response.json()["turn"], "black's turn")
+
+    def test_pass_turn_after_game_ended(self):
+        session = self.client.session
+        session["guest_game"]["result"] = "black"  # ゲーム終了状態
+        session.save()
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()["error"], "Game has already ended.")
+
+    def test_pass_turn_session_missing(self):
+        session = self.client.session
+        if "guest_game" in session:
+            del session["guest_game"]
+        session.save()
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["error"], "Game session not found")
+
+    def test_pass_turn_with_invalid_session_data(self):
+        session = self.client.session
+        session["guest_game"] = "not a dict"
+        session.save()
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("error", response.json())
 
 
 class TestGuestEndGameView(TestCase):
@@ -318,3 +360,42 @@ class TestGuestEndGameView(TestCase):
         self.assertEqual(response.json()["whiteCount"], 32)
         self.assertEqual(response.json()["winner"], "draw")
         mock_end_game.assert_called_once_with(fake_board)
+
+    def test_game_session_not_found_returns_404(self):
+        session = self.client.session
+        if "guest_game" in session:
+            del session["guest_game"]
+        session.save()
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json(), {"error": "Game session not found"})
+
+    def test_game_session_invalid_format_returns_400(self):
+        session = self.client.session
+        session["guest_game"] = {
+            "black_player": "たろう",
+            "white_player": "はなこ",
+            "turn": "invalid turn",  # turn が不正
+            "board": self.board_data,
+            "result": "対局中",
+        }
+        session.save()
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("error", response.json())
+
+    @patch("apps.guest_games.views.end_game")
+    def test_end_game_unexpected_exception_returns_500(self, mock_end_game):
+        # ロギング一時無効化
+        logging.disable(logging.CRITICAL)
+
+        mock_end_game.side_effect = Exception("unexpected failure")
+
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.json()["error"], "Internal server error")
+
+        # ロギング再有効化
+        logging.disable(logging.NOTSET)
