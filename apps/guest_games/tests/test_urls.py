@@ -5,7 +5,6 @@ import json
 from apps.guest_games.views import (
     GuestGameHomeView,
     GuestGameStartView,
-    guest_play_view,
     GuestGamePlayView,
 )
 

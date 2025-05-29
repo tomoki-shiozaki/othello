@@ -3,11 +3,11 @@ from django.urls import path
 from apps.guest_games.views import (
     GuestGameHomeView,
     GuestGameStartView,
+    GuestGamePlayView,
     GuestGamePlacePieceView,
     GuestGamePassTurnView,
     GuestGameEndView,
 )
-from apps.guest_games.views import guest_play_view, GuestGamePlayView
 
 app_name = "guest_games"
 

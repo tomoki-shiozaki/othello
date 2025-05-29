@@ -82,14 +82,6 @@ class GuestGameSessionMixin:
         return game
 
 
-def guest_play_view(request):
-    game = request.session.get("guest_game")
-    if not game:
-        return redirect("guest_games:new")
-
-    return render(request, "guest_games/guest_game_play.html", {"game": game})
-
-
 class GuestGamePlayView(GuestGameSessionMixin, TemplateView):
     template_name = "guest_games/guest_game_play.html"
 
