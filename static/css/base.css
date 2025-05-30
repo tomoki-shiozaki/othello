@@ -14,14 +14,28 @@ body {
 #site-name {
     color: #ffffff;
     font-size: 2rem;
+    font-weight: 600;
     /* 下線を消す */
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, font-weight 0.2s ease;
 }
 
-#site-name:hover {
+#site-name:hover,
+#site-name:focus {
     color: #ffeb3b;
-    font-weight: bold;
+    font-weight: 700;
+    outline: none;
+}
+
+#site-name:focus-visible {
+    outline: 2px solid #ffeb3b;
+    outline-offset: 2px;
+}
+
+@media (max-width: 576px) {
+    #site-name {
+        font-size: 1.5rem;
+    }
 }
 
 .wrapper {

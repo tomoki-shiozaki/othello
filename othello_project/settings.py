@@ -29,8 +29,8 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False)
 
-ALLOWED_HOSTS = ["othello-d46f.onrender.com", "localhost", "127.0.0.1"]
-# ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["othello-d46f.onrender.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
 
 # Application definition
@@ -48,9 +48,10 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     # Local
-    "accounts.apps.AccountsConfig",
-    "othello.apps.OthelloConfig",
-    "home.apps.HomeConfig",
+    "apps.accounts.apps.AccountsConfig",
+    "apps.othello.apps.OthelloConfig",
+    "apps.home.apps.HomeConfig",
+    "apps.guest_games.apps.GuestGamesConfig",
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

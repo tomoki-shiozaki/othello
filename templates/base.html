@@ -50,13 +50,10 @@
                             </li>
                         </ul>
                         {% else %}
-                        <form class="form-inline ms-auto">
-                            <a href="{% url 'login' %}" class="btn btn-outline-secondary">
-                                ログイン</a>
-                            <a href="{% url 'signup' %}" class="btn btn-primary ms-2">
-
-                                サインアップ</a>
-                        </form>
+                        <div class="ms-auto d-flex flex-column flex-sm-row">
+                            <a href="{% url 'login' %}" class="btn btn-outline-secondary mb-2 mb-sm-0 me-sm-2">ログイン</a>
+                            <a href="{% url 'signup' %}" class="btn btn-primary">新規登録</a>
+                        </div>
                         {% endif %}
                     </div>
                 </nav>

@@ -1,7 +1,7 @@
 # オセロWebアプリ
 
 ## 概要
-オセロアプリをDjangoで開発しています。現在(2025年5月10日)、オセロのローカル対戦機能を実装済みです。
+オセロアプリをDjangoで開発しています。現在(2025年5月30日)はローカル対戦機能を実装済みです。
 
 ## 目的
 このプロジェクトは、以下を目的として開発しました：
@@ -49,11 +49,7 @@
     
 
 ## 使用方法
-
-1. `http://127.0.0.1:8000/`にアクセスしてください。
-2. ゲームを遊ぶには、アカウントの作成が必要です。右上のサインアップから、アカウントを作成してください。
-3. 作ったアカウントでログインすると、左上に+Newボタンが現れます。このボタンから、新しいゲームを作ってください。
-4. 「対局履歴」から、過去の対局を確認することも可能です。対局を中断して、再開することもできます。
+`http://127.0.0.1:8000/`にアクセスしてください。基本的な操作は、アプリ画面上の指示に従って進めることができます。
 
 ## テスト方法
 
@@ -63,7 +59,18 @@
   ```
 
 ## デプロイ
-- RenderとNeonでデプロイしています。URLは[こちら](https://othello-d46f.onrender.com/)です。
+- RenderとNeonでデプロイしています。
+- 本番環境（mainブランチ）URL:  
+  [https://othello-main.onrender.com/](https://othello-main.onrender.com/)
+
+- 過去バージョンのデプロイURL:  
+  - v1.0.0のURL: [https://othello-d46f.onrender.com/](https://othello-d46f.onrender.com
+  )  
+  - v2.0.0のURL: [https://othello-feature-guest-user-play.onrender.com/](https://othello-feature-guest-user-play.onrender.com/)
+
+- 機能開発用プレビュー環境（feature/guest-user-playブランチ）URL:  
+  [https://othello-feature-guest-user-play.onrender.com/](https://othello-feature-guest-user-play.onrender.com/)
+
 - システム構成図は以下の通りで、アプリ全体の構成を簡潔に示しています。
 ##### システム構成図
 

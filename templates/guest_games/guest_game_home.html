@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}ゲストユーザートップ画面{% endblock title %}
+{% block content %}
+
+<h1 class="mb-4">ゲストユーザー用トップ画面</h1>
+<p class="lead mb-4">
+    ログインなしで、すぐにオセロを楽しめます！<br>
+    以下のボタンから新規ゲームを開始してください。
+</p>
+<div class="mb-4">
+    <a href="{% url 'guest_games:new' %}" class="btn btn-primary btn-lg">新規ゲームを開始する</a>
+</div>
+<p class="mb-2">
+    アカウントを登録しログインすると、以下のことができるようになります：
+</p>
+<ul>
+    <li>対局データの保存</li>
+    <li>過去の対局の確認</li>
+    <li>対局の一時中断・再開</li>
+</ul>
+<p class="text-muted">
+    ※ ゲストモードでは、対局データは保存されません。
+</p>
+
+{% endblock content %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ゲストの対局画面{% endblock title %}
+
+{% block extra_css %}
+<!-- オセロの対戦画面専用のCSSを読み込む -->
+<link href="{% static 'css/match.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- JavaScriptで使用するCSRFトークンとゲーム初期データを、data属性でHTMLに埋め込む -->
+<div id="csrf-data" data-csrf="{{ csrf_token }}"></div>
+<div id="initial-match-data" data-initial-black-player="{{ game.black_player }}"
+    data-initial-white-player="{{ game.white_player }}" data-initial-turn="{{ game.turn }}"
+    data-initial-status="{{ game.result }}">
+</div>
+<!-- JavaScriptで使用するゲーム盤面初期データをjson_scriptを用いてHTMLに出力する -->
+{{ game.board|json_script:"board-data" }}
+
+<!-- 現在のターン（プレイヤー）を表示する -->
+<div class="turn-indicator"><span id="turn"></span>の番</div>
+
+<!--オセロの盤面を表示する-->
+<div class="othello-grid-container"></div>
+<!-- 注意。実装当初はEmmet記法で以下のように書いた。 -->
+<!-- .othello-grid-item#othello-grid-item$@0*64>.othello-grid-cell#othello-cell$@0 -->
+<!-- セルを0から63で番号付けしたため、フロントエンドでは１次元配列でオセロの盤面を管理することにした -->
+<!-- 今後、余裕があればフロントエンドでも２次元配列として盤面を管理するように書き換える -->
+
+<!-- 駒を打つ処理の際、ネットワークエラー等が起これば、エラーメッセージを表示する -->
+<div id="response"></div>
+
+<!-- パスと終局処理をするためのボタン -->
+<div class="othello-button-container">
+    <button type="button" class="btn btn-outline-warning btn-lg" id="pass-turn" data-bs-toggle="tooltip" data-bs-placement="top"
+        title="打てる場所がないときに使用">パス</button>
+    <button type="button" class="btn btn-danger btn-lg" id="end-game" data-bs-toggle="tooltip" data-bs-placement="top"
+        title="ゲームを終了して結果を確定します">終局</button>
+</div>
+
+<!-- ゲーム結果を表示する -->
+<div id="result-box">
+    <p>黒: {{game.black_player}}さん　白: {{game.white_player}}さん</p>
+    <p class="counts"></p>
+    <p class="result">対局中</p>
+</div>
+
+<!-- 戻るボタンを配置 -->
+<div class="navigation-buttons mt-4">
+    <a href="{% url 'guest_games:home' %}" class="btn btn-outline-primary">ゲストトップへ戻る</a>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<!-- JavaScript-->
+<script src="{% static 'js/guest_game_play.js' %}"></script>
+{% endblock %}
