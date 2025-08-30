@@ -1,5 +1,6 @@
 # オセロ Web アプリ
 
+[![Build Status](https://github.com/tomoki-shiozaki/othello/actions/workflows/ci.yml/badge.svg)](https://github.com/tomoki-shiozaki/othello/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 概要
