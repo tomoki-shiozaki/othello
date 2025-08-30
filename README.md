@@ -5,7 +5,13 @@
 
 ## 概要
 
-オセロアプリを Django で開発しました。ローカル対戦機能を実装済みです。
+オセロアプリを Django で開発しました。ローカル対戦機能を実装済みです。  
+本番環境は [こちら](https://othello-main.onrender.com/) でデプロイされており、実際にブラウザ上でプレイ可能です。
+
+> ＊ただし、現在は Render の無料プランを使用しているため、最初の起動には約 1 分程度の待機時間が発生することがあります。ご了承ください。
+> 私の他の成果物である [図書館アプリ](https://github.com/tomoki-shiozaki/distributed-library) は Cloud Run でデプロイしており、起動が約 10 秒程度で行えます。
+
+ログインせずにゲストユーザーとしてプレイすることも可能ですが、[テスト用アカウント](#テスト用アカウント)を用いると、すべての機能が利用できます。
 
 ## 目的
 
@@ -81,6 +87,9 @@ python manage.py test
   私の他の成果物である [図書館アプリ](https://github.com/tomoki-shiozaki/distributed-library) では、  
   実際の業務を意識して Cloud Run でのデプロイや CI/CD を用いた運用を行っています。
 
+- 本番環境（main ブランチ）URL:  
+  [https://othello-main.onrender.com/](https://othello-main.onrender.com/)
+
 - 過去バージョンのデプロイ URL:
 
   - v1.0.0 の URL: [https://othello-d46f.onrender.com/](https://othello-d46f.onrender.com)
@@ -94,6 +103,20 @@ python manage.py test
 ##### システム構成図
 
 ![システム構成図](docs/system_architecture/system_architecture/system_architecture.svg)
+
+## テスト用アカウント
+
+テスト用アカウントを使用することで、すべての機能を試すことができます。ログイン後、以下の追加機能が利用可能です：
+
+- 対局履歴の保存と再開
+- 過去の対局履歴の確認
+
+テスト用アカウント:
+
+- ユーザー名: `user1`
+- パスワード: `dev_user1_123`
+
+ゲストプレイでも基本的な対局は可能ですが、アカウント作成後の機能もぜひお試しください。
 
 ## ライセンス
 
