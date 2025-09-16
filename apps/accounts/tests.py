@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .forms import CustomUserCreationForm, CustomUserChangeForm
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 
 # Create your tests here.
@@ -86,10 +86,8 @@ class CustomUserCreationFormTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("password2", form.errors)  # password2 にエラーがあることを確認
 
-        self.assertIn(
-            "This password is too short. It must contain at least 8 characters.",
-            str(form.errors["password2"]),
-        )
+        error_codes = [e.code for e in form.errors["password2"].as_data()]
+        self.assertIn("password_too_short", error_codes)
 
 
 class CustomUserChangeFormTest(TestCase):
